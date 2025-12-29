@@ -1,0 +1,687 @@
+2025-12-29 01:34:36,606 INFO Processing request of type ListToolsRequest
+2025-12-29 01:34:42,906 INFO Processing request of type CallToolRequest
+2025-12-29 01:34:49,969 INFO Processing request of type CallToolRequest
+2025-12-29 01:37:13,080 INFO Processing request of type CallToolRequest
+2025-12-29 01:38:58,651 INFO Processing request of type ListToolsRequest
+2025-12-29 01:39:07,960 INFO Processing request of type CallToolRequest
+2025-12-29 01:39:12,949 INFO Processing request of type CallToolRequest
+2025-12-29 01:41:33,199 INFO Processing request of type ListToolsRequest
+2025-12-29 01:41:41,586 INFO Processing request of type CallToolRequest
+2025-12-29 01:41:47,740 INFO Processing request of type CallToolRequest
+2025-12-29 01:45:09,575 INFO Processing request of type ListToolsRequest
+2025-12-29 01:45:14,805 INFO Processing request of type CallToolRequest
+2025-12-29 01:51:36,814 INFO Processing request of type ListToolsRequest
+2025-12-29 01:51:41,810 INFO Processing request of type CallToolRequest
+2025-12-29 01:51:42,742 ERROR Gemini diagnostic request failed
+Traceback (most recent call last):
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 790, in connect
+    sock_and_verified = _ssl_wrap_socket_and_match_hostname(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 969, in _ssl_wrap_socket_and_match_hostname
+    ssl_sock = ssl_wrap_socket(
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\ssl_.py", line 480, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(sock, context, tls_in_tls, server_hostname)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\ssl_.py", line 524, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 455, in wrap_socket
+    return self.sslsocket_class._create(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1041, in _create
+    self.do_handshake()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1319, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+urllib3.exceptions.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\adapters.py", line 644, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Max retries exceeded with url: /v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 139, in diagnose_gemini
+    resp = _gemini_test_request(api_key, endpoint, payload, timeout=10)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 116, in _gemini_test_request
+    return requests.post(url_with_key, headers=headers, json=payload, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\adapters.py", line 675, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Max retries exceeded with url: /v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)')))
+2025-12-29 01:55:17,005 INFO Processing request of type ListToolsRequest
+2025-12-29 01:55:28,229 INFO Processing request of type CallToolRequest
+2025-12-29 01:55:28,898 ERROR Gemini diagnostic request failed
+Traceback (most recent call last):
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 464, in _make_request
+    self._validate_conn(conn)
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 1093, in _validate_conn
+    conn.connect()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 790, in connect
+    sock_and_verified = _ssl_wrap_socket_and_match_hostname(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connection.py", line 969, in _ssl_wrap_socket_and_match_hostname
+    ssl_sock = ssl_wrap_socket(
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\ssl_.py", line 480, in ssl_wrap_socket
+    ssl_sock = _ssl_wrap_socket_impl(sock, context, tls_in_tls, server_hostname)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\ssl_.py", line 524, in _ssl_wrap_socket_impl
+    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 455, in wrap_socket
+    return self.sslsocket_class._create(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1041, in _create
+    self.do_handshake()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\ssl.py", line 1319, in do_handshake
+    self._sslobj.do_handshake()
+ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 787, in urlopen
+    response = self._make_request(
+               ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 488, in _make_request
+    raise new_e
+urllib3.exceptions.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\adapters.py", line 644, in send
+    resp = conn.urlopen(
+           ^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\connectionpool.py", line 841, in urlopen
+    retries = retries.increment(
+              ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\urllib3\util\retry.py", line 519, in increment
+    raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Max retries exceeded with url: /v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)')))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 139, in diagnose_gemini
+    resp = _gemini_test_request(api_key, endpoint, payload, timeout=10)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 116, in _gemini_test_request
+    return requests.post(url_with_key, headers=headers, json=payload, timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\api.py", line 115, in post
+    return request("post", url, data=data, json=json, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\api.py", line 59, in request
+    return session.request(method=method, url=url, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\requests\adapters.py", line 675, in send
+    raise SSLError(e, request=request)
+requests.exceptions.SSLError: HTTPSConnectionPool(host='generativelanguage.googleapis.com', port=443): Max retries exceeded with url: /v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)')))
+2025-12-29 01:58:44,697 INFO Processing request of type ListToolsRequest
+2025-12-29 01:58:50,044 INFO Processing request of type CallToolRequest
+2025-12-29 01:58:51,187 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 404 Not Found"
+2025-12-29 01:58:51,190 ERROR Gemini diagnostic request failed
+Traceback (most recent call last):
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 139, in diagnose_gemini
+    resp = await _gemini_test_request(api_key, endpoint, payload, timeout=10)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 115, in _gemini_test_request
+    response.raise_for_status()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2025-12-29 02:02:19,888 INFO Processing request of type CallToolRequest
+2025-12-29 02:02:22,159 INFO Processing request of type CallToolRequest
+2025-12-29 02:02:31,071 INFO Processing request of type CallToolRequest
+2025-12-29 02:02:31,864 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 404 Not Found"
+2025-12-29 02:02:31,864 ERROR Network/exception when contacting Gemini
+Traceback (most recent call last):
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 215, in consult_ai_architect
+    resp = await _gemini_test_request(api_key, endpoint, payload, timeout=15)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 115, in _gemini_test_request
+    response.raise_for_status()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2025-12-29 12:06:30,809 INFO Processing request of type ListToolsRequest
+2025-12-29 12:06:34,985 INFO Processing request of type CallToolRequest
+2025-12-29 12:06:56,468 INFO Processing request of type CallToolRequest
+2025-12-29 12:07:04,394 INFO Processing request of type CallToolRequest
+2025-12-29 12:07:05,169 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 404 Not Found"
+2025-12-29 12:07:05,170 ERROR Network/exception when contacting Gemini
+Traceback (most recent call last):
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 215, in consult_ai_architect
+    resp = await _gemini_test_request(api_key, endpoint, payload, timeout=15)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 115, in _gemini_test_request
+    response.raise_for_status()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2025-12-29 12:11:16,103 INFO Processing request of type ListResourcesRequest
+2025-12-29 12:11:19,809 INFO Processing request of type ListToolsRequest
+2025-12-29 12:11:22,840 INFO Processing request of type CallToolRequest
+2025-12-29 12:11:33,739 INFO Processing request of type CallToolRequest
+2025-12-29 12:11:34,343 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 404 Not Found"
+2025-12-29 12:11:34,344 ERROR Network/exception when contacting Gemini
+Traceback (most recent call last):
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 215, in consult_ai_architect
+    resp = await _gemini_test_request(api_key, endpoint, payload, timeout=15)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 115, in _gemini_test_request
+    response.raise_for_status()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2025-12-29 12:20:30,168 INFO Processing request of type ListToolsRequest
+2025-12-29 12:20:35,476 INFO Processing request of type CallToolRequest
+2025-12-29 12:20:58,706 INFO Processing request of type CallToolRequest
+2025-12-29 12:22:23,548 INFO Processing request of type CallToolRequest
+2025-12-29 12:22:24,305 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 404 Not Found"
+2025-12-29 12:22:24,307 ERROR Network/exception when contacting Gemini
+Traceback (most recent call last):
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 215, in consult_ai_architect
+    resp = await _gemini_test_request(api_key, endpoint, payload, timeout=15)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 115, in _gemini_test_request
+    response.raise_for_status()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2025-12-29 12:22:58,227 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:08,967 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:09,307 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:09,477 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:09,619 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:09,757 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:10,057 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:17,088 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:17,588 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:17,622 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:17,658 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:17,687 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:17,717 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:17,747 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:17,777 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:23:17,812 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:27:37,771 INFO Processing request of type ListToolsRequest
+2025-12-29 12:27:46,983 INFO Processing request of type CallToolRequest
+2025-12-29 12:27:56,066 INFO Processing request of type CallToolRequest
+2025-12-29 12:27:56,851 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 404 Not Found"
+2025-12-29 12:27:56,852 ERROR Network/exception when contacting Gemini
+Traceback (most recent call last):
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 215, in consult_ai_architect
+    resp = await _gemini_test_request(api_key, endpoint, payload, timeout=15)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 115, in _gemini_test_request
+    response.raise_for_status()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2025-12-29 12:28:18,017 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:17,890 INFO Processing request of type ListToolsRequest
+2025-12-29 12:32:22,115 INFO Processing request of type CallToolRequest
+2025-12-29 12:32:25,782 INFO Processing request of type CallToolRequest
+2025-12-29 12:32:38,752 INFO Processing request of type CallToolRequest
+2025-12-29 12:32:39,378 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 404 Not Found"
+2025-12-29 12:32:39,379 ERROR Network/exception when contacting Gemini
+Traceback (most recent call last):
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 215, in consult_ai_architect
+    resp = await _gemini_test_request(api_key, endpoint, payload, timeout=15)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Owner\Desktop\Nebius\MCP-CodeCartographer\server.py", line 115, in _gemini_test_request
+    response.raise_for_status()
+  File "C:\Users\Owner\AppData\Local\Programs\Python\Python312\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '404 Not Found' for url 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404
+2025-12-29 12:32:50,434 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:50,927 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,427 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,459 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,487 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,517 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,547 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,578 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,609 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,645 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,677 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,709 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,740 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,771 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,797 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,827 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:32:51,863 ERROR Received exception from stream: 1 validation error for JSONRPCMessage
+  Invalid JSON: EOF while parsing a value at line 2 column 0 [type=json_invalid, input_value='\n', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.12/v/json_invalid
+2025-12-29 12:41:28,467 INFO Processing request of type ListToolsRequest
+2025-12-29 12:41:41,431 INFO Processing request of type CallToolRequest
+2025-12-29 12:41:41,432 INFO Warning: RuntimeWarning: coroutine '_diagnose_gemini_async' was never awaited
+2025-12-29 12:48:36,740 INFO Processing request of type ListToolsRequest
+2025-12-29 12:48:40,722 INFO Processing request of type CallToolRequest
+2025-12-29 12:48:40,785 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 12:48:42,174 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 404 Not Found"
+2025-12-29 12:48:42,175 ERROR HTTP Status Error on attempt 1: 404
+2025-12-29 12:48:42,175 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 12:48:43,185 INFO Attempt 2/3 to call Gemini API...
+2025-12-29 12:48:43,291 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 404 Not Found"
+2025-12-29 12:48:43,293 ERROR HTTP Status Error on attempt 2: 404
+2025-12-29 12:48:43,293 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 12:48:44,803 INFO Attempt 3/3 to call Gemini API...
+2025-12-29 12:48:44,912 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 404 Not Found"
+2025-12-29 12:48:44,913 ERROR HTTP Status Error on attempt 3: 404
+2025-12-29 12:48:44,913 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 12:51:12,690 INFO Processing request of type ListToolsRequest
+2025-12-29 12:51:17,645 INFO Processing request of type CallToolRequest
+2025-12-29 12:51:17,646 INFO Warning: RuntimeWarning: coroutine '_diagnose_gemini_async' was never awaited
+2025-12-29 12:55:10,175 INFO Processing request of type ListToolsRequest
+2025-12-29 12:55:12,931 INFO Processing request of type CallToolRequest
+2025-12-29 12:55:12,988 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 12:55:13,711 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 429 Too Many Requests"
+2025-12-29 12:55:13,712 ERROR HTTP Status Error on attempt 1: 429
+2025-12-29 12:55:13,712 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleap
+2025-12-29 12:55:14,726 INFO Attempt 2/3 to call Gemini API...
+2025-12-29 12:55:14,844 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 429 Too Many Requests"
+2025-12-29 12:55:14,845 ERROR HTTP Status Error on attempt 2: 429
+2025-12-29 12:55:14,845 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/ge
+2025-12-29 12:55:16,353 INFO Attempt 3/3 to call Gemini API...
+2025-12-29 12:55:16,546 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBmnn6Vk6BrShTn-CEDqF9x8HpaGmZXAaM "HTTP/1.1 429 Too Many Requests"
+2025-12-29 12:55:16,547 ERROR HTTP Status Error on attempt 3: 429
+2025-12-29 12:55:16,547 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleap
+2025-12-29 13:02:55,848 INFO Processing request of type ListToolsRequest
+2025-12-29 13:02:59,478 INFO Processing request of type CallToolRequest
+2025-12-29 13:02:59,531 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 13:03:00,154 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:03:00,155 ERROR HTTP Status Error on attempt 1: 429
+2025-12-29 13:03:00,155 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/ge
+2025-12-29 13:03:01,167 INFO Attempt 2/3 to call Gemini API...
+2025-12-29 13:03:01,293 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:03:01,293 ERROR HTTP Status Error on attempt 2: 429
+2025-12-29 13:03:01,293 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleap
+2025-12-29 13:03:02,810 INFO Attempt 3/3 to call Gemini API...
+2025-12-29 13:03:02,931 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:03:02,932 ERROR HTTP Status Error on attempt 3: 429
+2025-12-29 13:03:02,932 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash\n* Quota exceeded for metric: generativelanguage.googleapis.com/ge
+2025-12-29 13:05:33,675 INFO Processing request of type ListToolsRequest
+2025-12-29 13:05:36,948 INFO Processing request of type CallToolRequest
+2025-12-29 13:05:37,013 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 13:05:37,585 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:05:37,585 ERROR HTTP Status Error on attempt 1: 429
+2025-12-29 13:05:37,585 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-lite\n* Quota exceeded for metric: generativelanguage.googleapis.c
+2025-12-29 13:05:38,595 INFO Attempt 2/3 to call Gemini API...
+2025-12-29 13:05:38,747 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:05:38,748 ERROR HTTP Status Error on attempt 2: 429
+2025-12-29 13:05:38,748 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-lite\n* Quota exceeded for metric: generativelanguage.googleapis.c
+2025-12-29 13:05:40,257 INFO Attempt 3/3 to call Gemini API...
+2025-12-29 13:05:40,365 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:05:40,365 ERROR HTTP Status Error on attempt 3: 429
+2025-12-29 13:05:40,365 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-lite\n* Quota exceeded for metric: generativelanguage.googleapis.c
+2025-12-29 13:22:20,655 INFO Processing request of type ListToolsRequest
+2025-12-29 13:22:25,277 INFO Processing request of type CallToolRequest
+2025-12-29 13:22:25,347 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 13:22:26,114 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=AIzaSyANb70Waqc4n4KczGpksQmojv6uAVrrebw "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:22:26,114 ERROR HTTP Status Error on attempt 1: 429
+2025-12-29 13:22:26,115 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-lite\n* Quota exceeded for metric: generativelanguage.goo
+2025-12-29 13:22:27,124 INFO Attempt 2/3 to call Gemini API...
+2025-12-29 13:22:27,239 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=AIzaSyANb70Waqc4n4KczGpksQmojv6uAVrrebw "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:22:27,241 ERROR HTTP Status Error on attempt 2: 429
+2025-12-29 13:22:27,242 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-lite\n* Quota exceeded for metric: generativelanguage.goo
+2025-12-29 13:22:28,746 INFO Attempt 3/3 to call Gemini API...
+2025-12-29 13:22:28,879 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=AIzaSyANb70Waqc4n4KczGpksQmojv6uAVrrebw "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:22:28,881 ERROR HTTP Status Error on attempt 3: 429
+2025-12-29 13:22:28,881 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-lite\n* Quota exceeded for metric: generativelanguage.googleapis.c
+2025-12-29 13:27:08,099 INFO Processing request of type ListToolsRequest
+2025-12-29 13:27:11,792 INFO Processing request of type CallToolRequest
+2025-12-29 13:27:11,860 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 13:27:12,409 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:27:12,410 ERROR HTTP Status Error on attempt 1: 429
+2025-12-29 13:27:12,410 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-lite\n* Quota exceeded for metric: generativelanguage.googleapis.c
+2025-12-29 13:27:13,418 INFO Attempt 2/3 to call Gemini API...
+2025-12-29 13:27:13,530 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:27:13,530 ERROR HTTP Status Error on attempt 2: 429
+2025-12-29 13:27:13,531 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-lite\n* Quota exceeded for metric: generativelanguage.goo
+2025-12-29 13:27:15,042 INFO Attempt 3/3 to call Gemini API...
+2025-12-29 13:27:15,157 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 429 Too Many Requests"
+2025-12-29 13:27:15,157 ERROR HTTP Status Error on attempt 3: 429
+2025-12-29 13:27:15,158 ERROR Response body: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-lite\n* Quota exceeded for metric: generativelanguage.goo
+2025-12-29 13:32:01,499 INFO Processing request of type ListToolsRequest
+2025-12-29 13:32:04,980 INFO Processing request of type CallToolRequest
+2025-12-29 13:32:05,055 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 13:32:05,709 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 404 Not Found"
+2025-12-29 13:32:05,709 ERROR HTTP Status Error on attempt 1: 404
+2025-12-29 13:32:05,709 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 13:32:06,723 INFO Attempt 2/3 to call Gemini API...
+2025-12-29 13:32:06,863 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 404 Not Found"
+2025-12-29 13:32:06,864 ERROR HTTP Status Error on attempt 2: 404
+2025-12-29 13:32:06,864 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 13:32:08,366 INFO Attempt 3/3 to call Gemini API...
+2025-12-29 13:32:08,485 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 404 Not Found"
+2025-12-29 13:32:08,486 ERROR HTTP Status Error on attempt 3: 404
+2025-12-29 13:32:08,486 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 13:33:54,041 INFO Processing request of type ListToolsRequest
+2025-12-29 13:33:59,235 INFO Processing request of type CallToolRequest
+2025-12-29 13:33:59,310 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 13:33:59,840 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 404 Not Found"
+2025-12-29 13:33:59,840 ERROR HTTP Status Error on attempt 1: 404
+2025-12-29 13:33:59,841 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 13:34:00,853 INFO Attempt 2/3 to call Gemini API...
+2025-12-29 13:34:01,194 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 404 Not Found"
+2025-12-29 13:34:01,195 ERROR HTTP Status Error on attempt 2: 404
+2025-12-29 13:34:01,195 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 13:34:02,702 INFO Attempt 3/3 to call Gemini API...
+2025-12-29 13:34:02,811 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 404 Not Found"
+2025-12-29 13:34:02,813 ERROR HTTP Status Error on attempt 3: 404
+2025-12-29 13:34:02,813 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-1.5-flash-latest is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 13:35:05,915 INFO Processing request of type ListToolsRequest
+2025-12-29 13:35:12,756 INFO Processing request of type CallToolRequest
+2025-12-29 13:35:12,819 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 13:35:13,380 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 404 Not Found"
+2025-12-29 13:35:13,381 ERROR HTTP Status Error on attempt 1: 404
+2025-12-29 13:35:13,381 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 13:35:14,389 INFO Attempt 2/3 to call Gemini API...
+2025-12-29 13:35:14,487 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 404 Not Found"
+2025-12-29 13:35:14,487 ERROR HTTP Status Error on attempt 2: 404
+2025-12-29 13:35:14,488 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 13:35:15,990 INFO Attempt 3/3 to call Gemini API...
+2025-12-29 13:35:16,098 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 404 Not Found"
+2025-12-29 13:35:16,098 ERROR HTTP Status Error on attempt 3: 404
+2025-12-29 13:35:16,099 ERROR Response body: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+2025-12-29 13:48:12,100 INFO Processing request of type ListToolsRequest
+2025-12-29 13:48:14,978 INFO Processing request of type CallToolRequest
+2025-12-29 13:48:15,039 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 13:48:16,252 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 200 OK"
+2025-12-29 13:48:16,253 INFO Successfully received response from Gemini API
+2025-12-29 13:48:25,195 INFO Processing request of type CallToolRequest
+2025-12-29 13:48:36,600 INFO Processing request of type CallToolRequest
+2025-12-29 13:48:36,602 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 13:48:38,575 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyCLGL7H7K5XGcgo2XTv8xfjgxPtZPW0vGA "HTTP/1.1 200 OK"
+2025-12-29 13:48:38,577 INFO Successfully received response from Gemini API
+2025-12-29 13:53:06,053 INFO Processing request of type ListToolsRequest
+2025-12-29 13:53:09,903 INFO Processing request of type CallToolRequest
+2025-12-29 13:53:09,975 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 13:53:14,206 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 200 OK"
+2025-12-29 13:53:14,207 INFO Successfully received response from Gemini API
+2025-12-29 16:57:23,942 INFO Processing request of type ListToolsRequest
+2025-12-29 16:57:31,129 INFO Processing request of type CallToolRequest
+2025-12-29 16:57:31,281 ERROR Error parsing C:\Users\Owner\Desktop\Semantic\QuinnTests\Common\db\models\persona_table.py: invalid syntax (<unknown>, line 1)
+2025-12-29 16:57:31,295 ERROR Error parsing C:\Users\Owner\Desktop\Semantic\QuinnTests\Common\db\models\results_artifacts.py: invalid syntax (<unknown>, line 48)
+2025-12-29 16:57:32,169 ERROR Error parsing C:\Users\Owner\Desktop\Semantic\QuinnTests\devtools\scripts\seed_db.py: closing parenthesis '}' does not match opening parenthesis '[' on line 135 (<unknown>, line 147)
+2025-12-29 16:57:32,384 ERROR Error parsing C:\Users\Owner\Desktop\Semantic\QuinnTests\orchestrator\src\services\tools_registry.py: invalid non-printable character U+FEFF (<unknown>, line 1)
+2025-12-29 16:57:35,006 ERROR Error parsing C:\Users\Owner\Desktop\Semantic\QuinnTests\tests\sanity\test_imports.py: unexpected indent (<unknown>, line 572)
+2025-12-29 16:57:49,999 INFO Processing request of type CallToolRequest
+2025-12-29 16:58:49,904 INFO Processing request of type CallToolRequest
+2025-12-29 16:58:49,935 ERROR Error parsing C:\Users\Owner\Desktop\Semantic\QuinnTests\orchestrator\src\services\tools_registry.py: invalid non-printable character U+FEFF (<unknown>, line 1)
+2025-12-29 16:58:59,683 INFO Processing request of type CallToolRequest
+2025-12-29 17:06:12,496 INFO Processing request of type CallToolRequest
+2025-12-29 17:06:16,972 INFO Processing request of type CallToolRequest
+2025-12-29 17:07:33,561 INFO Processing request of type CallToolRequest
+2025-12-29 17:07:33,624 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 17:07:35,779 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 200 OK"
+2025-12-29 17:07:35,779 INFO Successfully received response from Gemini API
+2025-12-29 17:34:35,135 INFO Processing request of type ListToolsRequest
+2025-12-29 17:35:18,981 INFO Processing request of type CallToolRequest
+2025-12-29 17:37:15,306 INFO Processing request of type CallToolRequest
+2025-12-29 17:37:15,404 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 17:37:17,313 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 200 OK"
+2025-12-29 17:37:17,313 INFO Successfully received response from Gemini API
+2025-12-29 17:42:37,381 INFO Processing request of type ListToolsRequest
+2025-12-29 17:42:48,059 INFO Processing request of type CallToolRequest
+2025-12-29 17:43:34,680 INFO Processing request of type CallToolRequest
+2025-12-29 17:43:34,754 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 17:43:36,911 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 200 OK"
+2025-12-29 17:43:36,911 INFO Successfully received response from Gemini API
+2025-12-29 18:34:26,320 INFO Processing request of type ListToolsRequest
+2025-12-29 18:34:38,817 INFO Processing request of type CallToolRequest
+2025-12-29 18:34:51,006 INFO Processing request of type CallToolRequest
+2025-12-29 18:34:51,076 INFO Attempt 1/3 to call Gemini API...
+2025-12-29 18:34:57,343 INFO HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyDqs8BPk5iRCS4_KMQE_ieaGk55IpqB0SM "HTTP/1.1 200 OK"
+2025-12-29 18:34:57,344 INFO Successfully received response from Gemini API
