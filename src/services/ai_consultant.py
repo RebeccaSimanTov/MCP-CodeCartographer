@@ -18,6 +18,9 @@ class AIConsultant:
         self.temperature = 0.7
         self.timeout = 30
         self.max_retries = 3
+        # Avoid ever logging the raw API key; log only its presence masked with stars
+        masked = "****" if self.api_key else "(not set)"
+        logging.debug(f"Gemini API Key status: {masked}")
     
     async def analyze(self, module_name: str, graph: nx.DiGraph) -> AIAnalysis:
         """
@@ -84,7 +87,7 @@ class AIConsultant:
     ) -> str:
         """מבצע קריאה ל-Gemini API עם retries."""
         url = f"{self.api_base}/models/{self.model}:generateContent?key={self.api_key}"
-        
+
         prompt = self._build_prompt(module_name, dependencies, used_by)
         payload = {
             "contents": [{
@@ -95,18 +98,18 @@ class AIConsultant:
                 "maxOutputTokens": 10000
             }
         }
-        
+
         async with httpx.AsyncClient(timeout=self.timeout, verify=False) as client:
             for attempt in range(self.max_retries):
                 try:
                     logging.info(f"Gemini API call attempt {attempt + 1}/{self.max_retries}")
-                    
+
                     resp = await client.post(url, json=payload)
                     resp.raise_for_status()
-                    
+
                     data = resp.json()
                     return self._extract_text_from_response(data)
-                
+
                 except httpx.HTTPStatusError as e:
                     logging.error(
                         f"HTTP {e.response.status_code} on attempt {attempt + 1}: "
@@ -115,13 +118,13 @@ class AIConsultant:
                     if attempt == self.max_retries - 1:
                         raise
                     await asyncio.sleep(1.5 ** attempt)
-                
+
                 except httpx.TimeoutException as e:
                     logging.error(f"Timeout on attempt {attempt + 1}: {e}")
                     if attempt == self.max_retries - 1:
                         raise
                     await asyncio.sleep(1.5 ** attempt)
-                
+
                 except Exception as e:
                     logging.error(f"Attempt {attempt + 1} failed: {e}")
                     if attempt == self.max_retries - 1:
