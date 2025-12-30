@@ -4,7 +4,7 @@ import httpx
 import asyncio
 import networkx as nx
 from dotenv import load_dotenv
-from models.schemas import AIAnalysis, ErrorModel
+from ..models.schemas import AIAnalysis, ErrorModel
 
 
 class AIConsultant:
