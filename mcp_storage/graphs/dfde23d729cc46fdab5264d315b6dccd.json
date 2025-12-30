@@ -1,0 +1,63 @@
+{
+  "nodes": [
+    {
+      "id": "src.server",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\server.py"
+    },
+    {
+      "id": "src.services.validate_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\services\\validate_service.py"
+    },
+    {
+      "id": "src.services.hash_utils",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\services\\hash_utils.py"
+    },
+    {
+      "id": "src.services.rules_evaluator",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\services\\rules_evaluator.py"
+    },
+    {
+      "id": "src.services.rules_translation",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\services\\rules_translation.py"
+    },
+    {
+      "id": "src.services.scoring",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\services\\scoring.py"
+    }
+  ],
+  "edges": [
+    [
+      "src.server",
+      "src.services.validate_service"
+    ],
+    [
+      "src.services.validate_service",
+      "src.services.scoring"
+    ],
+    [
+      "src.services.validate_service",
+      "src.services.rules_translation"
+    ],
+    [
+      "src.services.validate_service",
+      "src.services.rules_evaluator"
+    ]
+  ],
+  "ai_analysis": {
+    "risk_scores": {
+      "src.server": 7,
+      "src.services.validate_service": 6,
+      "src.services.hash_utils": 1,
+      "src.services.rules_evaluator": 8,
+      "src.services.rules_translation": 9,
+      "src.services.scoring": 2
+    },
+    "hidden_links": []
+  }
+}

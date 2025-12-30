@@ -141,5 +141,7 @@ local_settings.py
 
 # Keep project-specific build/output out
 build/
+.env
+__pycache__/
 
 # End of file
