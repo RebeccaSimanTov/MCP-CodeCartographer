@@ -5,7 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "mcp",
+    "pydantic>=2.0",
     "networkx>=3.0",
     "matplotlib>=3.6",
     "httpx>=0.24",
