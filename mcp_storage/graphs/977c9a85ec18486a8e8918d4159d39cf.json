@@ -1,0 +1,1362 @@
+{
+  "nodes": [
+    {
+      "id": "Common.db.models.base",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\base.py"
+    },
+    {
+      "id": "Common.db.models.enum",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\enum.py"
+    },
+    {
+      "id": "Common.db.models.executions_targets",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\executions_targets.py"
+    },
+    {
+      "id": "Common.db.models.persona",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\persona.py"
+    },
+    {
+      "id": "Common.db.models.persona_embeddings",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\persona_embeddings.py"
+    },
+    {
+      "id": "Common.db.models.persona_table",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\persona_table.py"
+    },
+    {
+      "id": "Common.db.models.results_artifacts",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\results_artifacts.py"
+    },
+    {
+      "id": "Common.db.models.schedule",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\schedule.py"
+    },
+    {
+      "id": "Common.db.models.tag_system",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\tag_system.py"
+    },
+    {
+      "id": "Common.db.models.tenant_table",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\tenant_table.py"
+    },
+    {
+      "id": "Common.db.models.test_suites_cases",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\db\\models\\test_suites_cases.py"
+    },
+    {
+      "id": "Common.models.persona",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\persona.py"
+    },
+    {
+      "id": "Common.models.plan",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\plan.py"
+    },
+    {
+      "id": "Common.models.orchestrator.mcp_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\orchestrator\\mcp_models.py"
+    },
+    {
+      "id": "Common.models.orchestrator.openai_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\orchestrator\\openai_models.py"
+    },
+    {
+      "id": "Common.models.orchestrator.workflow_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\orchestrator\\workflow_models.py"
+    },
+    {
+      "id": "Common.models.plan_generator.input_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\plan_generator\\input_models.py"
+    },
+    {
+      "id": "Common.models.plan_generator.output_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\plan_generator\\output_models.py"
+    },
+    {
+      "id": "Common.models.plan_reviewer.input_model",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\plan_reviewer\\input_model.py"
+    },
+    {
+      "id": "Common.models.plan_reviewer.output_model",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\plan_reviewer\\output_model.py"
+    },
+    {
+      "id": "Common.models.ui_agent.input_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\ui_agent\\input_models.py"
+    },
+    {
+      "id": "Common.models.ui_tester.input_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\ui_tester\\input_models.py"
+    },
+    {
+      "id": "Common.models.ui_tester.output_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\models\\ui_tester\\output_models.py"
+    },
+    {
+      "id": "Common.schemas.persona_management.schemas",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\schemas\\persona_management\\schemas.py"
+    },
+    {
+      "id": "Common.schemas.tag_system.domain",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\schemas\\tag_system\\domain.py"
+    },
+    {
+      "id": "Common.schemas.tenant_mgmt.domain",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\schemas\\tenant_mgmt\\domain.py"
+    },
+    {
+      "id": "Common.schemas.tenant_mgmt.tenant",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\schemas\\tenant_mgmt\\tenant.py"
+    },
+    {
+      "id": "Common.utils.connection",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\utils\\connection.py"
+    },
+    {
+      "id": "Common.utils.extended_context_logger",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\utils\\extended_context_logger.py"
+    },
+    {
+      "id": "Common.utils.json_utils",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\utils\\json_utils.py"
+    },
+    {
+      "id": "Common.utils.redis_client",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\utils\\redis_client.py"
+    },
+    {
+      "id": "Common.utils.semantic_cash",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\utils\\semantic_cash.py"
+    },
+    {
+      "id": "Common.utils.setting",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\Common\\utils\\setting.py"
+    },
+    {
+      "id": "db.migrations.env",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\db\\migrations\\env.py"
+    },
+    {
+      "id": "db.migrations.versions.0b0e03f7e244_resync_persona_embeddings_table",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\db\\migrations\\versions\\0b0e03f7e244_resync_persona_embeddings_table.py"
+    },
+    {
+      "id": "db.migrations.versions.1ce4ed001170_init",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\db\\migrations\\versions\\1ce4ed001170_init.py"
+    },
+    {
+      "id": "db.migrations.versions.465b6c9d7c4f_sync_models_with_db",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\db\\migrations\\versions\\465b6c9d7c4f_sync_models_with_db.py"
+    },
+    {
+      "id": "db.migrations.versions.672b6ae8a4ba_add_persona_embeddings_table",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\db\\migrations\\versions\\672b6ae8a4ba_add_persona_embeddings_table.py"
+    },
+    {
+      "id": "devtools.scripts.init_db",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\devtools\\scripts\\init_db.py"
+    },
+    {
+      "id": "devtools.scripts.seed_db",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\devtools\\scripts\\seed_db.py"
+    },
+    {
+      "id": "devtools.scripts.seed_personas",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\devtools\\scripts\\seed_personas.py"
+    },
+    {
+      "id": "orchestrator.src.agents.langchain_orchestrator",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\agents\\langchain_orchestrator.py"
+    },
+    {
+      "id": "orchestrator.src.services.db_utils",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\db_utils.py"
+    },
+    {
+      "id": "orchestrator.src.llm.llm_factory",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\llm\\llm_factory.py"
+    },
+    {
+      "id": "orchestrator.src.services.rabbitmq_rpc_client",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\rabbitmq_rpc_client.py"
+    },
+    {
+      "id": "orchestrator.src.services.nl_to_dsl_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\nl_to_dsl_service.py"
+    },
+    {
+      "id": "orchestrator.src.services.tools_registry",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\tools_registry.py"
+    },
+    {
+      "id": "orchestrator.src.llm.llm_config",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\llm\\llm_config.py"
+    },
+    {
+      "id": "orchestrator.src.server.chat_session",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\server\\chat_session.py"
+    },
+    {
+      "id": "orchestrator.src.server.websocket_server",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\server\\websocket_server.py"
+    },
+    {
+      "id": "orchestrator.src.services.workers.mcp_bridge_worker",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\workers\\mcp_bridge_worker.py"
+    },
+    {
+      "id": "orchestrator.src.services.workers.standalone_worker",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\workers\\standalone_worker.py"
+    },
+    {
+      "id": "orchestrator.src.workers.orchestrator_worker",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\workers\\orchestrator_worker.py"
+    },
+    {
+      "id": "orchestrator.src.workers.standalone_worker",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\workers\\standalone_worker.py"
+    },
+    {
+      "id": "persona_management.src.query_builder",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management\\src\\query_builder.py"
+    },
+    {
+      "id": "persona_management.src.server",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management\\src\\server.py"
+    },
+    {
+      "id": "tenant_management.src.service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_search.src.agent",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_search\\src\\agent.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_search.src.server",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_search\\src\\server.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_search.src.services.domain_selector_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_search\\src\\services\\domain_selector_service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_search.src.services.vector_search_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_search\\src\\services\\vector_search_service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_search.src.services.sql_filter_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_search\\src\\services\\sql_filter_service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_search.src.services.schema_discovery_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_search\\src\\services\\schema_discovery_service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_search.src.services.progressive_filter_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_search\\src\\services\\progressive_filter_service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_to_vector.src.agent",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_to_vector\\src\\agent.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_search.src.services.cache_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_search\\src\\services\\cache_service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_search.src.services.embedding_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_search\\src\\services\\embedding_service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_to_vector.src.server",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_to_vector\\src\\server.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_to_vector.src.services.persona_to_text_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_to_vector\\src\\services\\persona_to_text_service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_to_vector.src.services.split_to_domains_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_to_vector\\src\\services\\split_to_domains_service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_to_vector.src.services.embed_text_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_to_vector\\src\\services\\embed_text_service.py"
+    },
+    {
+      "id": "persona_management_RAG.persona_to_vector.src.services.store_embeddings_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\persona_management_RAG\\persona_to_vector\\src\\services\\store_embeddings_service.py"
+    },
+    {
+      "id": "plan_generator.src.server",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_generator\\src\\server.py"
+    },
+    {
+      "id": "plan_generator.src.service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_generator\\src\\service.py"
+    },
+    {
+      "id": "plan_generator.src.tenant_management",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_generator\\src\\tenant_management.py"
+    },
+    {
+      "id": "plan_reviewer.src.server",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\server.py"
+    },
+    {
+      "id": "plan_reviewer.src.services.validate_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\services\\validate_service.py"
+    },
+    {
+      "id": "plan_reviewer.src.services.hash_utils",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\services\\hash_utils.py"
+    },
+    {
+      "id": "plan_reviewer.src.services.rules_evaluator",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\services\\rules_evaluator.py"
+    },
+    {
+      "id": "plan_reviewer.src.services.rules_translation",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\services\\rules_translation.py"
+    },
+    {
+      "id": "plan_reviewer.src.services.scoring",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\plan_reviewer\\src\\services\\scoring.py"
+    },
+    {
+      "id": "qtest_cli.qtest.cli",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\cli.py"
+    },
+    {
+      "id": "qtest_cli.qtest.tenant_cmds",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\tenant_cmds.py"
+    },
+    {
+      "id": "qtest_cli.qtest.persona_cmds",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\persona_cmds.py"
+    },
+    {
+      "id": "qtest_cli.qtest.tag_cmds",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\tag_cmds.py"
+    },
+    {
+      "id": "qtest_cli.qtest.core.exit_codes",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\core\\exit_codes.py"
+    },
+    {
+      "id": "qtest_cli.qtest.core.render_result",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\core\\render_result.py"
+    },
+    {
+      "id": "qtest_cli.qtest.core.persona_logic",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\core\\persona_logic.py"
+    },
+    {
+      "id": "qtest_cli.qtest.core.persona_exceptions",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\core\\persona_exceptions.py"
+    },
+    {
+      "id": "qtest_cli.qtest.core.tag_logic",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\core\\tag_logic.py"
+    },
+    {
+      "id": "qtest_cli.qtest.core.tag_exceptions",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\core\\tag_exceptions.py"
+    },
+    {
+      "id": "qtest_cli.qtest.core.tenant_logic",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\qtest_cli\\qtest\\core\\tenant_logic.py"
+    },
+    {
+      "id": "site_mapper_service.app.main",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\main.py"
+    },
+    {
+      "id": "site_mapper_service.app.api.routes_map",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\api\\routes_map.py"
+    },
+    {
+      "id": "site_mapper_service.app.core.config",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\core\\config.py"
+    },
+    {
+      "id": "site_mapper_service.app.core.deps",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\core\\deps.py"
+    },
+    {
+      "id": "site_mapper_service.app.models.schemas",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\models\\schemas.py"
+    },
+    {
+      "id": "site_mapper_service.app.utils.logger",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\utils\\logger.py"
+    },
+    {
+      "id": "site_mapper_service.app.services.storage",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\services\\storage.py"
+    },
+    {
+      "id": "site_mapper_service.app.services.site_mapper.site_mapper",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\services\\site_mapper\\site_mapper.py"
+    },
+    {
+      "id": "site_mapper_service.app.services.site_mapper.graph_cleanup",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\services\\site_mapper\\graph_cleanup.py"
+    },
+    {
+      "id": "site_mapper_service.app.services.site_mapper.semantic_extractors",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\services\\site_mapper\\semantic_extractors.py"
+    },
+    {
+      "id": "site_mapper_service.app.services.site_mapper.snapshot_utils",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\services\\site_mapper\\snapshot_utils.py"
+    },
+    {
+      "id": "site_mapper_service.app.services.site_mapper.state_utils",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\site_mapper_service\\app\\services\\site_mapper\\state_utils.py"
+    },
+    {
+      "id": "tag_system.models.api_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\models\\api_models.py"
+    },
+    {
+      "id": "tag_system.models.sqlalchemy_models.category_model",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\models\\sqlalchemy_models\\category_model.py"
+    },
+    {
+      "id": "tag_system.models.sqlalchemy_models.tag_model",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\models\\sqlalchemy_models\\tag_model.py"
+    },
+    {
+      "id": "tag_system.models.sqlalchemy_models.tag_object_map_model",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\models\\sqlalchemy_models\\tag_object_map_model.py"
+    },
+    {
+      "id": "tag_system.src.app",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\app.py"
+    },
+    {
+      "id": "tenant_management.src.storage.db",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\storage\\db.py"
+    },
+    {
+      "id": "tag_system.src.main",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\main.py"
+    },
+    {
+      "id": "tag_system.src.service.category_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\service\\category_service.py"
+    },
+    {
+      "id": "tag_system.src.storage.storage",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\storage\\storage.py"
+    },
+    {
+      "id": "tag_system.src.service.tag_object_map_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\service\\tag_object_map_service.py"
+    },
+    {
+      "id": "tag_system.src.service.tag_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\service\\tag_service.py"
+    },
+    {
+      "id": "tag_system.src.storage.category_storage",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\storage\\category_storage.py"
+    },
+    {
+      "id": "tenant_management.models.sqlalchemy_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\models\\sqlalchemy_models.py"
+    },
+    {
+      "id": "tag_system.src.storage.mapping",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\storage\\mapping.py"
+    },
+    {
+      "id": "tag_system.src.storage.db",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\storage\\db.py"
+    },
+    {
+      "id": "tag_system.src.storage.tag_storage",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\storage\\tag_storage.py"
+    },
+    {
+      "id": "tag_system.src.storage.tag_object_map_storage",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tag_system\\src\\storage\\tag_object_map_storage.py"
+    },
+    {
+      "id": "tenant_management.scheduler_runner",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\scheduler_runner.py"
+    },
+    {
+      "id": "tenant_management.src.scheduler.scheduler_manager",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\scheduler\\scheduler_manager.py"
+    },
+    {
+      "id": "tenant_management.src.scheduler.jobs",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\scheduler\\jobs.py"
+    },
+    {
+      "id": "tenant_management.worker",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\worker.py"
+    },
+    {
+      "id": "tenant_management.src.scheduler.queue_manager",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\scheduler\\queue_manager.py"
+    },
+    {
+      "id": "tenant_management.models.api_models",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\models\\api_models.py"
+    },
+    {
+      "id": "tenant_management.src.app",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\app.py"
+    },
+    {
+      "id": "tenant_management.src.cache.redis_client",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\cache\\redis_client.py"
+    },
+    {
+      "id": "tenant_management.src.cache.tenant_cache",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\cache\\tenant_cache.py"
+    },
+    {
+      "id": "tenant_management.src.main",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\main.py"
+    },
+    {
+      "id": "tenant_management.src.cache.cache_decorator",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\cache\\cache_decorator.py"
+    },
+    {
+      "id": "tenant_management.src.storage.mapping",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\storage\\mapping.py"
+    },
+    {
+      "id": "tenant_management.src.storage.storage",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\tenant_management\\src\\storage\\storage.py"
+    },
+    {
+      "id": "UI-Tester.src.manual_tests.run_runner_btl",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\UI-Tester\\src\\manual_tests\\run_runner_btl.py"
+    },
+    {
+      "id": "ui_tester.src.services.playwright_runner.runner",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_tester\\src\\services\\playwright_runner\\runner.py"
+    },
+    {
+      "id": "UI-Tester.src.manual_tests.run_runner_kolhalashon",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\UI-Tester\\src\\manual_tests\\run_runner_kolhalashon.py"
+    },
+    {
+      "id": "UI-Tester.src.services.storage.s3_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\UI-Tester\\src\\services\\storage\\s3_service.py"
+    },
+    {
+      "id": "ui_agent.src.server",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\server.py"
+    },
+    {
+      "id": "ui_agent.src.agent.agent_runner",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\agent\\agent_runner.py"
+    },
+    {
+      "id": "ui_agent.src.tools.site_mapper_tool",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\tools\\site_mapper_tool.py"
+    },
+    {
+      "id": "ui_agent.src.tools.ui_tester_tool",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\tools\\ui_tester_tool.py"
+    },
+    {
+      "id": "ui_agent.src.tools.steps_tool",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\tools\\steps_tool.py"
+    },
+    {
+      "id": "ui_agent.src.tools.load_relevant_graph",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\tools\\load_relevant_graph.py"
+    },
+    {
+      "id": "ui_agent.src.tools.get_tenant_url_tool",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\tools\\get_tenant_url_tool.py"
+    },
+    {
+      "id": "ui_agent.src.agent.parsers",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\agent\\parsers.py"
+    },
+    {
+      "id": "ui_agent.src.agent.prompt_templates",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\agent\\prompt_templates.py"
+    },
+    {
+      "id": "ui_agent.src.configs.setting",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\configs\\setting.py"
+    },
+    {
+      "id": "ui_agent.src.llm.llm_factory",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_agent\\src\\llm\\llm_factory.py"
+    },
+    {
+      "id": "ui_tester.src.server",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_tester\\src\\server.py"
+    },
+    {
+      "id": "ui_tester.src.services.flow_manager",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_tester\\src\\services\\flow_manager.py"
+    },
+    {
+      "id": "ui_tester.src.services.playwright_runner.css_normalizer",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_tester\\src\\services\\playwright_runner\\css_normalizer.py"
+    },
+    {
+      "id": "ui_tester.src.services.playwright_runner.image_validation_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_tester\\src\\services\\playwright_runner\\image_validation_service.py"
+    },
+    {
+      "id": "ui_tester.src.services.ui_map.ref_scanner",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_tester\\src\\services\\ui_map\\ref_scanner.py"
+    },
+    {
+      "id": "ui_tester.src.services.ui_map.mapper",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_tester\\src\\services\\ui_map\\mapper.py"
+    },
+    {
+      "id": "ui_tester.src.services.storage.s3_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\ui_tester\\src\\services\\storage\\s3_service.py"
+    }
+  ],
+  "edges": [
+    [
+      "Common.db.models.executions_targets",
+      "Common.db.models.base"
+    ],
+    [
+      "Common.db.models.executions_targets",
+      "Common.db.models.enum"
+    ],
+    [
+      "Common.db.models.persona_embeddings",
+      "Common.db.models.base"
+    ],
+    [
+      "Common.db.models.schedule",
+      "Common.db.models.base"
+    ],
+    [
+      "Common.db.models.tag_system",
+      "Common.db.models.base"
+    ],
+    [
+      "Common.db.models.tag_system",
+      "Common.db.models.enum"
+    ],
+    [
+      "Common.db.models.tenant_table",
+      "Common.db.models.base"
+    ],
+    [
+      "Common.db.models.test_suites_cases",
+      "Common.db.models.base"
+    ],
+    [
+      "Common.schemas.tag_system.domain",
+      "Common.db.models.enum"
+    ],
+    [
+      "Common.schemas.tenant_mgmt.tenant",
+      "Common.schemas.tag_system.domain"
+    ],
+    [
+      "orchestrator.src.agents.langchain_orchestrator",
+      "orchestrator.src.services.db_utils"
+    ],
+    [
+      "orchestrator.src.agents.langchain_orchestrator",
+      "orchestrator.src.llm.llm_factory"
+    ],
+    [
+      "orchestrator.src.agents.langchain_orchestrator",
+      "orchestrator.src.services.rabbitmq_rpc_client"
+    ],
+    [
+      "orchestrator.src.agents.langchain_orchestrator",
+      "orchestrator.src.services.nl_to_dsl_service"
+    ],
+    [
+      "orchestrator.src.agents.langchain_orchestrator",
+      "orchestrator.src.services.tools_registry"
+    ],
+    [
+      "orchestrator.src.llm.llm_factory",
+      "orchestrator.src.llm.llm_config"
+    ],
+    [
+      "orchestrator.src.services.nl_to_dsl_service",
+      "orchestrator.src.llm.llm_factory"
+    ],
+    [
+      "orchestrator.src.server.chat_session",
+      "orchestrator.src.services.rabbitmq_rpc_client"
+    ],
+    [
+      "orchestrator.src.server.chat_session",
+      "orchestrator.src.agents.langchain_orchestrator"
+    ],
+    [
+      "orchestrator.src.server.websocket_server",
+      "orchestrator.src.server.chat_session"
+    ],
+    [
+      "orchestrator.src.services.workers.standalone_worker",
+      "orchestrator.src.services.workers.mcp_bridge_worker"
+    ],
+    [
+      "orchestrator.src.workers.orchestrator_worker",
+      "orchestrator.src.agents.langchain_orchestrator"
+    ],
+    [
+      "orchestrator.src.workers.standalone_worker",
+      "orchestrator.src.services.workers.standalone_worker"
+    ],
+    [
+      "persona_management.src.server",
+      "tenant_management.src.service"
+    ],
+    [
+      "tenant_management.src.service",
+      "tag_system.src.storage.storage"
+    ],
+    [
+      "tenant_management.src.service",
+      "tenant_management.src.storage.db"
+    ],
+    [
+      "tenant_management.src.service",
+      "tenant_management.src.cache.cache_decorator"
+    ],
+    [
+      "persona_management_RAG.persona_search.src.server",
+      "persona_management_RAG.persona_search.src.services.domain_selector_service"
+    ],
+    [
+      "persona_management_RAG.persona_search.src.server",
+      "persona_management_RAG.persona_search.src.services.vector_search_service"
+    ],
+    [
+      "persona_management_RAG.persona_search.src.server",
+      "persona_management_RAG.persona_search.src.services.sql_filter_service"
+    ],
+    [
+      "persona_management_RAG.persona_search.src.server",
+      "persona_management_RAG.persona_search.src.services.schema_discovery_service"
+    ],
+    [
+      "persona_management_RAG.persona_search.src.server",
+      "persona_management_RAG.persona_search.src.services.progressive_filter_service"
+    ],
+    [
+      "persona_management_RAG.persona_search.src.server",
+      "persona_management_RAG.persona_to_vector.src.agent"
+    ],
+    [
+      "persona_management_RAG.persona_search.src.services.vector_search_service",
+      "persona_management_RAG.persona_search.src.services.cache_service"
+    ],
+    [
+      "persona_management_RAG.persona_search.src.services.vector_search_service",
+      "persona_management_RAG.persona_search.src.services.embedding_service"
+    ],
+    [
+      "persona_management_RAG.persona_search.src.services.progressive_filter_service",
+      "persona_management_RAG.persona_search.src.services.sql_filter_service"
+    ],
+    [
+      "persona_management_RAG.persona_to_vector.src.server",
+      "persona_management_RAG.persona_to_vector.src.services.persona_to_text_service"
+    ],
+    [
+      "persona_management_RAG.persona_to_vector.src.server",
+      "persona_management_RAG.persona_to_vector.src.services.split_to_domains_service"
+    ],
+    [
+      "persona_management_RAG.persona_to_vector.src.server",
+      "persona_management_RAG.persona_to_vector.src.services.embed_text_service"
+    ],
+    [
+      "persona_management_RAG.persona_to_vector.src.server",
+      "persona_management_RAG.persona_to_vector.src.services.store_embeddings_service"
+    ],
+    [
+      "plan_generator.src.server",
+      "tenant_management.src.service"
+    ],
+    [
+      "plan_reviewer.src.server",
+      "plan_reviewer.src.services.validate_service"
+    ],
+    [
+      "plan_reviewer.src.services.validate_service",
+      "plan_reviewer.src.services.scoring"
+    ],
+    [
+      "plan_reviewer.src.services.validate_service",
+      "plan_reviewer.src.services.rules_translation"
+    ],
+    [
+      "plan_reviewer.src.services.validate_service",
+      "plan_reviewer.src.services.rules_evaluator"
+    ],
+    [
+      "qtest_cli.qtest.cli",
+      "qtest_cli.qtest.tenant_cmds"
+    ],
+    [
+      "qtest_cli.qtest.cli",
+      "qtest_cli.qtest.persona_cmds"
+    ],
+    [
+      "qtest_cli.qtest.cli",
+      "qtest_cli.qtest.tag_cmds"
+    ],
+    [
+      "qtest_cli.qtest.tenant_cmds",
+      "qtest_cli.qtest.core.tenant_logic"
+    ],
+    [
+      "qtest_cli.qtest.tenant_cmds",
+      "qtest_cli.qtest.core.exit_codes"
+    ],
+    [
+      "qtest_cli.qtest.tenant_cmds",
+      "qtest_cli.qtest.core.render_result"
+    ],
+    [
+      "qtest_cli.qtest.persona_cmds",
+      "qtest_cli.qtest.core.exit_codes"
+    ],
+    [
+      "qtest_cli.qtest.persona_cmds",
+      "qtest_cli.qtest.core.render_result"
+    ],
+    [
+      "qtest_cli.qtest.persona_cmds",
+      "qtest_cli.qtest.core.persona_logic"
+    ],
+    [
+      "qtest_cli.qtest.persona_cmds",
+      "qtest_cli.qtest.core.persona_exceptions"
+    ],
+    [
+      "qtest_cli.qtest.tag_cmds",
+      "qtest_cli.qtest.core.exit_codes"
+    ],
+    [
+      "qtest_cli.qtest.tag_cmds",
+      "qtest_cli.qtest.core.render_result"
+    ],
+    [
+      "qtest_cli.qtest.tag_cmds",
+      "qtest_cli.qtest.core.tag_logic"
+    ],
+    [
+      "qtest_cli.qtest.tag_cmds",
+      "qtest_cli.qtest.core.tag_exceptions"
+    ],
+    [
+      "qtest_cli.qtest.core.exit_codes",
+      "Common.db.models.enum"
+    ],
+    [
+      "qtest_cli.qtest.core.render_result",
+      "qtest_cli.qtest.core.exit_codes"
+    ],
+    [
+      "qtest_cli.qtest.core.persona_logic",
+      "qtest_cli.qtest.core.persona_exceptions"
+    ],
+    [
+      "qtest_cli.qtest.core.persona_exceptions",
+      "qtest_cli.qtest.core.exit_codes"
+    ],
+    [
+      "qtest_cli.qtest.core.tag_logic",
+      "qtest_cli.qtest.core.tag_exceptions"
+    ],
+    [
+      "qtest_cli.qtest.core.tag_exceptions",
+      "qtest_cli.qtest.core.exit_codes"
+    ],
+    [
+      "qtest_cli.qtest.core.tenant_logic",
+      "qtest_cli.qtest.core.exit_codes"
+    ],
+    [
+      "site_mapper_service.app.main",
+      "site_mapper_service.app.api.routes_map"
+    ],
+    [
+      "site_mapper_service.app.main",
+      "site_mapper_service.app.core.config"
+    ],
+    [
+      "site_mapper_service.app.api.routes_map",
+      "site_mapper_service.app.core.deps"
+    ],
+    [
+      "site_mapper_service.app.api.routes_map",
+      "site_mapper_service.app.models.schemas"
+    ],
+    [
+      "site_mapper_service.app.api.routes_map",
+      "site_mapper_service.app.utils.logger"
+    ],
+    [
+      "site_mapper_service.app.core.deps",
+      "site_mapper_service.app.core.config"
+    ],
+    [
+      "site_mapper_service.app.core.deps",
+      "site_mapper_service.app.services.storage"
+    ],
+    [
+      "site_mapper_service.app.core.deps",
+      "site_mapper_service.app.services.site_mapper.site_mapper"
+    ],
+    [
+      "site_mapper_service.app.services.site_mapper.site_mapper",
+      "site_mapper_service.app.utils.logger"
+    ],
+    [
+      "site_mapper_service.app.services.site_mapper.site_mapper",
+      "site_mapper_service.app.services.site_mapper.snapshot_utils"
+    ],
+    [
+      "site_mapper_service.app.services.site_mapper.site_mapper",
+      "site_mapper_service.app.services.site_mapper.semantic_extractors"
+    ],
+    [
+      "site_mapper_service.app.services.site_mapper.site_mapper",
+      "site_mapper_service.app.services.site_mapper.graph_cleanup"
+    ],
+    [
+      "site_mapper_service.app.services.site_mapper.snapshot_utils",
+      "site_mapper_service.app.services.site_mapper.state_utils"
+    ],
+    [
+      "site_mapper_service.app.services.site_mapper.snapshot_utils",
+      "site_mapper_service.app.utils.logger"
+    ],
+    [
+      "site_mapper_service.app.services.site_mapper.snapshot_utils",
+      "site_mapper_service.app.services.site_mapper.site_mapper"
+    ],
+    [
+      "site_mapper_service.app.services.site_mapper.state_utils",
+      "site_mapper_service.app.utils.logger"
+    ],
+    [
+      "tag_system.models.sqlalchemy_models.tag_model",
+      "tag_system.models.sqlalchemy_models.category_model"
+    ],
+    [
+      "tag_system.models.sqlalchemy_models.tag_object_map_model",
+      "tag_system.models.sqlalchemy_models.category_model"
+    ],
+    [
+      "tag_system.src.app",
+      "tenant_management.src.service"
+    ],
+    [
+      "tag_system.src.app",
+      "tenant_management.src.storage.db"
+    ],
+    [
+      "tenant_management.src.storage.db",
+      "tenant_management.models.sqlalchemy_models"
+    ],
+    [
+      "tag_system.src.service.category_service",
+      "tag_system.src.storage.storage"
+    ],
+    [
+      "tag_system.src.storage.storage",
+      "tag_system.src.storage.category_storage"
+    ],
+    [
+      "tag_system.src.storage.storage",
+      "tag_system.src.storage.tag_storage"
+    ],
+    [
+      "tag_system.src.storage.storage",
+      "tag_system.src.storage.tag_object_map_storage"
+    ],
+    [
+      "tag_system.src.service.tag_object_map_service",
+      "tag_system.src.storage.storage"
+    ],
+    [
+      "tag_system.src.service.tag_service",
+      "tag_system.src.storage.storage"
+    ],
+    [
+      "tag_system.src.storage.category_storage",
+      "tenant_management.models.sqlalchemy_models"
+    ],
+    [
+      "tag_system.src.storage.category_storage",
+      "tag_system.src.storage.mapping"
+    ],
+    [
+      "tag_system.src.storage.mapping",
+      "tenant_management.models.sqlalchemy_models"
+    ],
+    [
+      "tag_system.src.storage.db",
+      "tenant_management.models.sqlalchemy_models"
+    ],
+    [
+      "tag_system.src.storage.tag_storage",
+      "tenant_management.models.sqlalchemy_models"
+    ],
+    [
+      "tag_system.src.storage.tag_storage",
+      "tag_system.src.storage.mapping"
+    ],
+    [
+      "tag_system.src.storage.tag_object_map_storage",
+      "tenant_management.models.sqlalchemy_models"
+    ],
+    [
+      "tag_system.src.storage.tag_object_map_storage",
+      "tag_system.src.storage.mapping"
+    ],
+    [
+      "tenant_management.scheduler_runner",
+      "tenant_management.src.scheduler.scheduler_manager"
+    ],
+    [
+      "tenant_management.scheduler_runner",
+      "tenant_management.src.scheduler.jobs"
+    ],
+    [
+      "tenant_management.src.scheduler.jobs",
+      "tenant_management.src.storage.db"
+    ],
+    [
+      "tenant_management.src.scheduler.jobs",
+      "tag_system.src.storage.storage"
+    ],
+    [
+      "tenant_management.src.scheduler.jobs",
+      "tenant_management.src.service"
+    ],
+    [
+      "tenant_management.src.scheduler.jobs",
+      "tenant_management.src.scheduler.queue_manager"
+    ],
+    [
+      "tenant_management.worker",
+      "tenant_management.src.scheduler.queue_manager"
+    ],
+    [
+      "tenant_management.src.scheduler.queue_manager",
+      "tenant_management.src.cache.redis_client"
+    ],
+    [
+      "tenant_management.src.scheduler.queue_manager",
+      "tenant_management.src.scheduler.jobs"
+    ],
+    [
+      "tenant_management.src.app",
+      "tenant_management.src.service"
+    ],
+    [
+      "tenant_management.src.app",
+      "tenant_management.src.storage.db"
+    ],
+    [
+      "tenant_management.src.app",
+      "tenant_management.src.cache.redis_client"
+    ],
+    [
+      "tenant_management.src.app",
+      "tenant_management.src.cache.tenant_cache"
+    ],
+    [
+      "tenant_management.src.cache.tenant_cache",
+      "Common.utils.redis_client"
+    ],
+    [
+      "tenant_management.src.main",
+      "tenant_management.src.app"
+    ],
+    [
+      "tenant_management.src.cache.cache_decorator",
+      "tenant_management.src.cache.tenant_cache"
+    ],
+    [
+      "tenant_management.src.cache.cache_decorator",
+      "tag_system.src.storage.storage"
+    ],
+    [
+      "tenant_management.src.storage.mapping",
+      "tenant_management.models.sqlalchemy_models"
+    ],
+    [
+      "tenant_management.src.storage.storage",
+      "tenant_management.models.sqlalchemy_models"
+    ],
+    [
+      "tenant_management.src.storage.storage",
+      "tenant_management.src.storage.db"
+    ],
+    [
+      "tenant_management.src.storage.storage",
+      "tag_system.src.storage.mapping"
+    ],
+    [
+      "UI-Tester.src.manual_tests.run_runner_btl",
+      "ui_tester.src.services.playwright_runner.runner"
+    ],
+    [
+      "ui_tester.src.services.playwright_runner.runner",
+      "ui_tester.src.services.playwright_runner.image_validation_service"
+    ],
+    [
+      "ui_tester.src.services.playwright_runner.runner",
+      "ui_tester.src.services.ui_map.ref_scanner"
+    ],
+    [
+      "ui_tester.src.services.playwright_runner.runner",
+      "ui_tester.src.services.ui_map.mapper"
+    ],
+    [
+      "ui_tester.src.services.playwright_runner.runner",
+      "ui_tester.src.services.storage.s3_service"
+    ],
+    [
+      "ui_tester.src.services.playwright_runner.runner",
+      "ui_tester.src.services.playwright_runner.css_normalizer"
+    ],
+    [
+      "UI-Tester.src.manual_tests.run_runner_kolhalashon",
+      "ui_tester.src.services.playwright_runner.runner"
+    ],
+    [
+      "ui_agent.src.server",
+      "ui_agent.src.agent.agent_runner"
+    ],
+    [
+      "ui_agent.src.agent.agent_runner",
+      "ui_agent.src.tools.site_mapper_tool"
+    ],
+    [
+      "ui_agent.src.agent.agent_runner",
+      "ui_agent.src.tools.ui_tester_tool"
+    ],
+    [
+      "ui_agent.src.agent.agent_runner",
+      "ui_agent.src.tools.steps_tool"
+    ],
+    [
+      "ui_agent.src.agent.agent_runner",
+      "ui_agent.src.tools.load_relevant_graph"
+    ],
+    [
+      "ui_agent.src.agent.agent_runner",
+      "ui_agent.src.tools.get_tenant_url_tool"
+    ],
+    [
+      "ui_agent.src.agent.agent_runner",
+      "orchestrator.src.llm.llm_factory"
+    ],
+    [
+      "ui_agent.src.tools.steps_tool",
+      "orchestrator.src.llm.llm_factory"
+    ],
+    [
+      "ui_agent.src.tools.steps_tool",
+      "ui_agent.src.agent.prompt_templates"
+    ],
+    [
+      "ui_agent.src.tools.steps_tool",
+      "ui_agent.src.agent.parsers"
+    ],
+    [
+      "ui_agent.src.llm.llm_factory",
+      "ui_agent.src.configs.setting"
+    ],
+    [
+      "ui_tester.src.server",
+      "ui_tester.src.services.flow_manager"
+    ],
+    [
+      "ui_tester.src.services.flow_manager",
+      "ui_tester.src.services.playwright_runner.runner"
+    ],
+    [
+      "ui_tester.src.services.flow_manager",
+      "UI-Tester.src.services.storage.s3_service"
+    ],
+    [
+      "ui_tester.src.services.ui_map.mapper",
+      "ui_tester.src.services.ui_map.ref_scanner"
+    ]
+  ]
+}

@@ -14,7 +14,7 @@ from .repository_scanner import MCP_STORAGE_DIR
 class GraphGenerator:
     """
     Service for creating an Architectural MRI visualization using a Hierarchical (Top-Down) Layout.
-    Combines engineering aesthetics with MRI data (Risk & Shadows).
+    Ensures a TREE structure even if the graph has cycles or hidden links.
     """
     
     def __init__(self, default_filename: str = "architecture_map.png"):
@@ -22,7 +22,9 @@ class GraphGenerator:
 
     def generate_mri_view(self, graph: nx.DiGraph, risk_scores: Optional[dict] = None, filename: Optional[str] = None, storage_dir: Optional[str] = None, return_image: bool = True) -> MapResult:
         """
-        Generates the MRI view using the Engineering/Hierarchical layout with visible arrows.
+        Generates the MRI view.
+        CRITICAL FIX: Calculates layout based on a 'clean' DAG to force a tree shape,
+        then overlays the complex connections (red lines) on top.
         """
         risk_scores = risk_scores or {}
 
@@ -33,10 +35,31 @@ class GraphGenerator:
         plt.figure(figsize=(28, 24))
         ax = plt.gca()
 
-        # 2. Hierarchical Layout Logic (Top-Down Tree)
+        # 2. Robust Hierarchical Layout Logic
         pos = {}
         try:
-            layers = list(nx.topological_generations(graph))
+            # Step A: build a 'skeleton' graph for computing positions only
+            # Copy the graph and remove anything that prevents forming a tree
+            layout_g = nx.DiGraph()
+            layout_g.add_nodes_from(graph.nodes())
+            
+            # Use only regular (explicit) edges; ignore red (hidden) ones for layout
+            explicit_edges = [(u, v) for u, v, d in graph.edges(data=True) if d.get("type") != "hidden"]
+            layout_g.add_edges_from(explicit_edges)
+
+            # Step B: cycle breaking
+            # If there's a cyclic dependency, topological generation fails. We'll break cycles forcibly.
+            try:
+                while not nx.is_directed_acyclic_graph(layout_g):
+                    # Find a cycle and break it (remove its last edge)
+                    cycle = nx.find_cycle(layout_g)
+                    layout_g.remove_edge(cycle[-1][0], cycle[-1][1])
+            except Exception:
+                pass # if it fails, continue with fallback
+
+            # Step C: compute layers (the resulting tree)
+            layers = list(nx.topological_generations(layout_g))
+            
             y_gap = 10.0 
             x_gap = 8.0  
             
@@ -46,14 +69,16 @@ class GraphGenerator:
                     x = (j - (len(layer) - 1) / 2) * x_gap
                     y = -i * y_gap
                     pos[node] = (x, y)
-        except Exception:
-            logging.warning("Cycle detected/layout failed, using fallback layout.")
+                    
+        except Exception as e:
+            logging.warning(f"Layout fallback triggered: {e}")
+            # As a last-resort fallback, use spring layout
             pos = nx.spring_layout(graph, k=4.0, iterations=50)
 
-        # 3. Risk Calculation (Size & Color for Squares)
+        # 3. Risk Calculation (Size & Color)
         node_sizes = []
         node_colors = []
-        base_size = 14000 # גודל הריבועים
+        base_size = 14000
         
         try: centrality = nx.in_degree_centrality(graph)
         except: centrality = {n:0 for n in graph.nodes()}
@@ -63,32 +88,29 @@ class GraphGenerator:
             impact = (centrality.get(node, 0) * 10) + 1
             risk = complexity * impact
             
-            # גודל
             node_sizes.append(base_size * (1 + risk/30.0))
             
-            # צבע (כחול רגיל, אדום לסיכון)
             if risk > 20:
                 node_colors.append(plt.cm.Reds(min(0.8, 0.3 + risk/50.0)))
             else:
                 blue_val = 0.2 + min(0.6, centrality.get(node, 0)*3)
                 node_colors.append(plt.cm.Blues(blue_val))
 
-        # 4. Draw Edges (With visible arrows now!)
+        # 4. Draw Edges (Visible Arrows Fix)
         for u, v, data in graph.edges(data=True):
             is_hidden = data.get("type") == "hidden"
             
-            # הגדרות ברירת מחדל הנדסיות
             connection_style = "arc,angleA=-90,angleB=90,rad=15"
             
             if is_hidden:
-                # קשרים נסתרים (MRI)
+                # hidden links (MRI) - red & dashed
                 color = "#FF0000"
                 style = "dashed"
                 width = 3.5
                 alpha = 0.9
                 connection_style = "arc3,rad=-0.4"
             else:
-                # קשרים רגילים (הנדסי)
+                # regular connections - gray/black
                 try:
                     if abs(pos[u][1] - pos[v][1]) > y_gap * 1.1:
                          style = "dashed"
@@ -112,12 +134,11 @@ class GraphGenerator:
                 width=width,
                 alpha=alpha,
                 connectionstyle=connection_style,
-                arrowsize=25,
+                arrows=True,
+                arrowsize=35,
                 arrowstyle='-|>',
-                # --- התיקון: הוספת מרווחים כדי שהחץ ייראה ---
-                min_source_margin=25, 
-                min_target_margin=25, 
-                # -------------------------------------------
+                min_source_margin=75,
+                min_target_margin=75,
                 ax=ax
             )
 
@@ -155,7 +176,7 @@ class GraphGenerator:
         raw_bytes = buf.getvalue()
         plt.close()
 
-        # Persist logic...
+        # Persist Logic
         mcp_images_dir = os.path.join(os.path.dirname(MCP_STORAGE_DIR), "images")
         os.makedirs(mcp_images_dir, exist_ok=True)
         image_filename = filename if filename else f"{uuid.uuid4().hex}.png"

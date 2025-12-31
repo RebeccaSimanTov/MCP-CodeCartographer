@@ -6,13 +6,13 @@ import json
 import uuid
 from ..models.schemas import ScanResult
 
-# --- הגדרה מרכזית: התיקייה הפנימית של ה-MCP ---
+# --- Core setting: MCP internal storage folder ---
 MCP_STORAGE_DIR = os.path.join(os.getcwd(), "mcp_storage", "graphs")
 
 class ImportVisitor(ast.NodeVisitor):
     """
-    מבקר AST שאוסף את כל האימפורטים מקובץ פייתון.
-    תומך ב-import רגיל, from-import, וגם בטעינה דינמית.
+    AST visitor that collects all imports from a Python file.
+    Supports import, from-import, and dynamic imports.
     """
     def __init__(self, current_file):
         self.current_file = current_file
@@ -30,11 +30,11 @@ class ImportVisitor(ast.NodeVisitor):
         
     def visit_Call(self, node):
         try:
-            # תמיכה ב- __import__("name")
+            # support for __import__("name")
             if isinstance(node.func, ast.Name) and node.func.id == "__import__":
                 if node.args and isinstance(node.args[0], ast.Constant):
                     self.imports.append(node.args[0].value)
-            # תמיכה ב- importlib.import_module("name")
+            # support for importlib.import_module("name")
             elif isinstance(node.func, ast.Attribute) and node.func.attr == "import_module":
                 if node.args and isinstance(node.args[0], ast.Constant):
                     self.imports.append(node.args[0].value)
@@ -44,7 +44,7 @@ class ImportVisitor(ast.NodeVisitor):
 
 class RepositoryScanner:
     """
-    סורק את התיקייה, מוצא קבצי פייתון, ובנה גרף תלויות (Dependency Graph).
+    Scans a directory, finds Python files, and builds a Dependency Graph.
     """
     
     def __init__(self):
@@ -52,7 +52,7 @@ class RepositoryScanner:
         self._valid_files_map = set()
     
     def _get_module_name(self, full_path: str, root_path: str) -> str:
-        """הופך נתיב קובץ (src/utils.py) לשם מודול (src.utils)"""
+        """Convert file path (src/utils.py) to module name (src.utils)"""
         rel_path = os.path.relpath(full_path, root_path)
         rel_path = rel_path.replace("\\", "/") 
         module_path = os.path.splitext(rel_path)[0]
@@ -61,20 +61,20 @@ class RepositoryScanner:
 
     def _resolve_import(self, imp_name: str) -> str:
         """
-        מנסה למצוא לאיזה קובץ הכוונה באימפורט.
-        משתמש בלוגיקה גנרית (Suffix Match) כדי לעבוד בכל מבנה פרויקט.
+        Try to find which file an import refers to.
+        Uses generic suffix-match logic to work across project structures.
         """
-        # 1. התאמה מדויקת
+        # 1. Exact match
         if imp_name in self._valid_files_map:
             return imp_name
 
-        # 2. התאמה לפי סיומת (הפתרון הגנרי החזק)
+        # 2. Suffix match (robust generic solution)
         dot_imp = f".{imp_name}"
         for valid_file in self._valid_files_map:
             if valid_file.endswith(dot_imp):
                 return valid_file
 
-        # 3. ניסיון לפרק היררכיה (from a.b.c -> נסה למצוא את a.b)
+        # 3. Try to peel hierarchy (from a.b.c -> try to find a.b)
         parts = imp_name.split(".")
         for i in range(len(parts), 0, -1):
             candidate = ".".join(parts[:i])
@@ -97,14 +97,14 @@ class RepositoryScanner:
         errors = []
         found_files = []
 
-        # רשימת התעלמות מורחבת
+        # Extended skip list
         skip_dirs = {
             "venv", ".venv", "env", ".env", "__pycache__", ".git", 
             "node_modules", ".idea", ".vscode", "tests", "test", "docs",
             "mcp_storage", "build", "dist"
         }
 
-        # 1. שלב האיסוף (Collect Files)
+        # 1. Collection phase (Collect Files)
         for root, _, files in os.walk(target_path):
             if any(part in skip_dirs for part in root.split(os.sep)):
                 continue
@@ -117,10 +117,10 @@ class RepositoryScanner:
                     self._valid_files_map.add(module_name)
                     found_files.append((full_path, module_name))
 
-        # 2. שלב בניית הגרף (Build Graph)
+        # 2. Graph building phase (Build Graph)
         for full_path, module_name in found_files:
             analyzed_files += 1
-            # שומרים את ה-file_path בצומת! זה קריטי ל-AI שיבוא אחר כך
+            # We store the file_path on the node! This is critical for downstream AI
             self._dependency_graph.add_node(module_name, type="module", file_path=full_path)
             
             try:
@@ -135,26 +135,25 @@ class RepositoryScanner:
                 for imp in visitor.imports:
                     target = self._resolve_import(imp)
                     if target and target != module_name:
-                        # --- השינוי החשוב: הוספת type="explicit" ---
-                        # זה אומר לצייר: "זה אימפורט אמיתי מהקוד, תצייר אותו בקו רגיל"
+                        # --- Important change: add type="explicit" ---
+                        # This indicates: "this is a real import from the code; draw it as a normal line"
                         self._dependency_graph.add_edge(module_name, target, type="explicit")
                         
             except Exception as e:
                 logging.warning(f"Error parsing {full_path}: {e}")
                 pass
 
-        # 3. שמירה וסיום
+        # 3. Save & finish
         most_central = self._find_most_central_node()
 
-        # המרה ל-JSON (תומך ב-Attributes של NetworkX)
+        # Convert to JSON (supports NetworkX attributes)
         nodes = [{"id": n, **attrs} for n, attrs in self._dependency_graph.nodes(data=True)]
         edges = [[u, v, attrs] for u, v, attrs in self._dependency_graph.edges(data=True)]
         
-        # בגרסה הפשוטה שומרים רק [u, v], אבל כאן נשמור גם attributes אם צריך לעתיד.
-        # לצורך תאימות מלאה ל-server.py הנוכחי, נחזור לפורמט הפשוט של edges,
-        # כי ה-ScanResult ב-server טוען מחדש ומוסיף Explicit ידנית אם חסר,
-        # אבל עדיף שהקובץ יהיה מוכן.
-        # נשמור בפורמט פשוט יותר לקובץ כדי לא להסתבך עם ה-Schema:
+        # In the simple version we only store [u, v], but here we could keep attributes for future use.
+        # For full compatibility with current server.py, we use a simple edges format,
+        # as the server's ScanResult reloads and adds explicit edges if missing.
+        # Keeping a simpler file format avoids schema complications.
         simple_edges = [[u, v] for u, v in self._dependency_graph.edges()]
         
         graph_serialized = {"nodes": nodes, "edges": simple_edges}

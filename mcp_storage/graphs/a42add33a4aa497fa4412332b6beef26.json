@@ -1,0 +1,192 @@
+{
+  "nodes": [
+    {
+      "id": "src.agents.langchain_orchestrator",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\agents\\langchain_orchestrator.py"
+    },
+    {
+      "id": "src.services.db_utils",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\db_utils.py"
+    },
+    {
+      "id": "src.llm.llm_factory",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\llm\\llm_factory.py"
+    },
+    {
+      "id": "src.services.rabbitmq_rpc_client",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\rabbitmq_rpc_client.py"
+    },
+    {
+      "id": "src.services.nl_to_dsl_service",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\nl_to_dsl_service.py"
+    },
+    {
+      "id": "src.services.tools_registry",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\tools_registry.py"
+    },
+    {
+      "id": "src.llm.llm_config",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\llm\\llm_config.py"
+    },
+    {
+      "id": "src.server.chat_session",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\server\\chat_session.py"
+    },
+    {
+      "id": "src.server.websocket_server",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\server\\websocket_server.py"
+    },
+    {
+      "id": "src.services.workers.mcp_bridge_worker",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\workers\\mcp_bridge_worker.py"
+    },
+    {
+      "id": "src.services.workers.standalone_worker",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\services\\workers\\standalone_worker.py"
+    },
+    {
+      "id": "src.workers.orchestrator_worker",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\workers\\orchestrator_worker.py"
+    },
+    {
+      "id": "src.workers.standalone_worker",
+      "type": "module",
+      "file_path": "C:\\Users\\Owner\\Desktop\\Semantic\\QuinnTests\\orchestrator\\src\\workers\\standalone_worker.py"
+    }
+  ],
+  "edges": [
+    [
+      "src.agents.langchain_orchestrator",
+      "src.services.db_utils"
+    ],
+    [
+      "src.agents.langchain_orchestrator",
+      "src.llm.llm_factory"
+    ],
+    [
+      "src.agents.langchain_orchestrator",
+      "src.services.rabbitmq_rpc_client"
+    ],
+    [
+      "src.agents.langchain_orchestrator",
+      "src.services.nl_to_dsl_service"
+    ],
+    [
+      "src.agents.langchain_orchestrator",
+      "src.services.tools_registry"
+    ],
+    [
+      "src.llm.llm_factory",
+      "src.llm.llm_config"
+    ],
+    [
+      "src.services.nl_to_dsl_service",
+      "src.llm.llm_factory"
+    ],
+    [
+      "src.server.chat_session",
+      "src.services.rabbitmq_rpc_client"
+    ],
+    [
+      "src.server.chat_session",
+      "src.agents.langchain_orchestrator"
+    ],
+    [
+      "src.server.websocket_server",
+      "src.server.chat_session"
+    ],
+    [
+      "src.services.workers.standalone_worker",
+      "src.services.workers.mcp_bridge_worker"
+    ],
+    [
+      "src.workers.orchestrator_worker",
+      "src.agents.langchain_orchestrator"
+    ],
+    [
+      "src.workers.standalone_worker",
+      "src.services.workers.standalone_worker"
+    ]
+  ],
+  "ai_analysis": {
+    "risk_scores": {
+      "src.agents.langchain_orchestrator": 7,
+      "src.services.db_utils": 2,
+      "src.llm.llm_factory": 4,
+      "src.services.rabbitmq_rpc_client": 3,
+      "src.services.nl_to_dsl_service": 6,
+      "src.services.tools_registry": 7,
+      "src.llm.llm_config": 4,
+      "src.server.chat_session": 8,
+      "src.server.websocket_server": 3,
+      "src.services.workers.mcp_bridge_worker": 5,
+      "src.services.workers.standalone_worker": 6,
+      "src.workers.orchestrator_worker": 9,
+      "src.workers.standalone_worker": 1
+    },
+    "hidden_links": [
+      {
+        "source": "src.services.tools_registry",
+        "target": "src.services.workers.standalone_worker",
+        "type": "Communication Coupling: Shared RabbitMQ Tool Queue Names ('plan_generator', 'plan_reviewer', 'ui_agent', 'persona_search')"
+      },
+      {
+        "source": "src.services.tools_registry",
+        "target": "src.workers.orchestrator_worker",
+        "type": "Communication Coupling: Shared RPC Result Payload Keys ('status', 'output', 'needs_user_input', 'question', 'parameter_name')"
+      },
+      {
+        "source": "src.services.tools_registry",
+        "target": "src.server.chat_session",
+        "type": "Communication Coupling: Shared RPC Result Payload Keys ('status', 'output', 'question', 'parameter_name', 'error')"
+      },
+      {
+        "source": "src.services.workers.standalone_worker",
+        "target": "src.workers.orchestrator_worker",
+        "type": "Config Coupling: Shared RabbitMQ Connection Environment Variable Names (RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_USER, RABBITMQ_PASSWORD)"
+      },
+      {
+        "source": "src.services.rabbitmq_rpc_client",
+        "target": "src.services.workers.standalone_worker",
+        "type": "Config Coupling: Shared RabbitMQ Connection Environment Variable Names (RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_USER, RABBITMQ_PASSWORD)"
+      },
+      {
+        "source": "src.services.rabbitmq_rpc_client",
+        "target": "src.workers.orchestrator_worker",
+        "type": "Config Coupling: Shared RabbitMQ Connection Environment Variable Names (RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_USER, RABBITMQ_PASSWORD)"
+      },
+      {
+        "source": "src.workers.orchestrator_worker",
+        "target": "src.llm.llm_config",
+        "type": "Config Coupling: Shared LLM Provider Identifier String ('openai' via LLM_PROVIDER env var)"
+      },
+      {
+        "source": "src.server.chat_session",
+        "target": "src.llm.llm_config",
+        "type": "Config Coupling: Shared LLM Provider Identifier String ('openai' default parameter)"
+      },
+      {
+        "source": "src.llm.llm_config",
+        "target": "src.llm.llm_factory",
+        "type": "Config Coupling: Implied reliance on Environment Variable 'OPENAI_API_KEY' for OpenAI provider configuration"
+      },
+      {
+        "source": "src.server.websocket_server",
+        "target": "src.server.chat_session",
+        "type": "Config Coupling: Shared Environment Variable 'USE_RABBITMQ'"
+      }
+    ]
+  }
+}
