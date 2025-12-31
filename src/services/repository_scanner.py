@@ -4,12 +4,16 @@ import logging
 import networkx as nx
 import json
 import uuid
-from ..models.schemas import ScanResult, ErrorModel
+from ..models.schemas import ScanResult
 
-# --- הגדרה מרכזית: התיקייה הפנימית של ה-MCP ---
+# --- Core setting: MCP internal storage folder ---
 MCP_STORAGE_DIR = os.path.join(os.getcwd(), "mcp_storage", "graphs")
 
 class ImportVisitor(ast.NodeVisitor):
+    """
+    AST visitor that collects all imports from a Python file.
+    Supports import, from-import, and dynamic imports.
+    """
     def __init__(self, current_file):
         self.current_file = current_file
         self.imports = []
@@ -20,76 +24,67 @@ class ImportVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node):
-        # תיקון אחרון: תופס גם אימפורטים יחסיים (from .utils import x)
-        # אנחנו לוקחים את שם המודול (utils) ונותנים לסורק החכם למצוא אותו לפי סיומת
         if node.module:
             self.imports.append(node.module)
         self.generic_visit(node)
         
     def visit_Call(self, node):
         try:
-            # תמיכה ב- __import__("name")
+            # support for __import__("name")
             if isinstance(node.func, ast.Name) and node.func.id == "__import__":
-                if node.args and isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, str):
+                if node.args and isinstance(node.args[0], ast.Constant):
                     self.imports.append(node.args[0].value)
-            # תמיכה ב- importlib.import_module("name")
+            # support for importlib.import_module("name")
             elif isinstance(node.func, ast.Attribute) and node.func.attr == "import_module":
-                if node.args and isinstance(node.args[0], ast.Constant) and isinstance(node.args[0].value, str):
+                if node.args and isinstance(node.args[0], ast.Constant):
                     self.imports.append(node.args[0].value)
         except Exception:
             pass
         self.generic_visit(node)
 
 class RepositoryScanner:
-    """Service for scanning a repository - Generic & Robust Mode."""
+    """
+    Scans a directory, finds Python files, and builds a Dependency Graph.
+    """
     
     def __init__(self):
         self._dependency_graph = nx.DiGraph()
         self._valid_files_map = set()
     
-    def get_graph(self) -> nx.DiGraph:
-        return self._dependency_graph
-    
     def _get_module_name(self, full_path: str, root_path: str) -> str:
+        """Convert file path (src/utils.py) to module name (src.utils)"""
         rel_path = os.path.relpath(full_path, root_path)
         rel_path = rel_path.replace("\\", "/") 
         module_path = os.path.splitext(rel_path)[0]
         module_name = module_path.replace("/", ".")
         return module_name
 
-    def _resolve_import(self, imp_name: str, current_module: str) -> str:
-        """Logic to resolve imports regardless of project structure."""
-        
-        # 1. Exact Match
+    def _resolve_import(self, imp_name: str) -> str:
+        """
+        Try to find which file an import refers to.
+        Uses generic suffix-match logic to work across project structures.
+        """
+        # 1. Exact match
         if imp_name in self._valid_files_map:
             return imp_name
 
-        # 2. Suffix Match (The Generic Solution)
-        # מחפש כל קובץ שנגמר בנקודה + השם המבוקש
+        # 2. Suffix match (robust generic solution)
         dot_imp = f".{imp_name}"
-        potential_matches = []
         for valid_file in self._valid_files_map:
             if valid_file.endswith(dot_imp):
-                potential_matches.append(valid_file)
-        
-        if len(potential_matches) > 0:
-            # מחזיר את ההתאמה הראשונה (לרוב זה מספיק טוב)
-            # אפשר לשכלל ולבחור את הקרוב ביותר להיררכיה, אבל זה כבר Over-engineering
-            return potential_matches[0]
+                return valid_file
 
-        # 3. Parent Fallback (from a.b import c -> check a.b)
+        # 3. Try to peel hierarchy (from a.b.c -> try to find a.b)
         parts = imp_name.split(".")
         for i in range(len(parts), 0, -1):
-            candidate_partial = ".".join(parts[:i])
+            candidate = ".".join(parts[:i])
+            if candidate in self._valid_files_map:
+                return candidate
             
-            if candidate_partial in self._valid_files_map:
-                return candidate_partial
-            
-            suffix_partial = f".{candidate_partial}"
+            suffix_candidate = f".{candidate}"
             for valid_file in self._valid_files_map:
-                if valid_file.endswith(suffix_partial):
+                if valid_file.endswith(suffix_candidate):
                     return valid_file
-                
         return None
 
     def scan(self, path: str = ".") -> ScanResult:
@@ -102,13 +97,14 @@ class RepositoryScanner:
         errors = []
         found_files = []
 
+        # Extended skip list
         skip_dirs = {
             "venv", ".venv", "env", ".env", "__pycache__", ".git", 
             "node_modules", ".idea", ".vscode", "tests", "test", "docs",
-            "mcp_storage"
+            "mcp_storage", "build", "dist"
         }
 
-        # 1. Collect Files
+        # 1. Collection phase (Collect Files)
         for root, _, files in os.walk(target_path):
             if any(part in skip_dirs for part in root.split(os.sep)):
                 continue
@@ -121,9 +117,10 @@ class RepositoryScanner:
                     self._valid_files_map.add(module_name)
                     found_files.append((full_path, module_name))
 
-        # 2. Build Graph
+        # 2. Graph building phase (Build Graph)
         for full_path, module_name in found_files:
             analyzed_files += 1
+            # We store the file_path on the node! This is critical for downstream AI
             self._dependency_graph.add_node(module_name, type="module", file_path=full_path)
             
             try:
@@ -136,25 +133,30 @@ class RepositoryScanner:
                 visitor.visit(tree)
                 
                 for imp in visitor.imports:
-                    target = self._resolve_import(imp, module_name)
-                    # מונע קישור עצמי
+                    target = self._resolve_import(imp)
                     if target and target != module_name:
-                        self._dependency_graph.add_edge(module_name, target)
+                        # --- Important change: add type="explicit" ---
+                        # This indicates: "this is a real import from the code; draw it as a normal line"
+                        self._dependency_graph.add_edge(module_name, target, type="explicit")
                         
             except Exception as e:
                 logging.warning(f"Error parsing {full_path}: {e}")
                 pass
 
-        # 3. Save & Return
+        # 3. Save & finish
         most_central = self._find_most_central_node()
 
-        nodes = []
-        for n, attrs in self._dependency_graph.nodes(data=True):
-            node_entry = {"id": n}
-            node_entry.update(attrs)
-            nodes.append(node_entry)
-        edges = [[u, v] for u, v in self._dependency_graph.edges()]
-        graph_serialized = {"nodes": nodes, "edges": edges}
+        # Convert to JSON (supports NetworkX attributes)
+        nodes = [{"id": n, **attrs} for n, attrs in self._dependency_graph.nodes(data=True)]
+        edges = [[u, v, attrs] for u, v, attrs in self._dependency_graph.edges(data=True)]
+        
+        # In the simple version we only store [u, v], but here we could keep attributes for future use.
+        # For full compatibility with current server.py, we use a simple edges format,
+        # as the server's ScanResult reloads and adds explicit edges if missing.
+        # Keeping a simpler file format avoids schema complications.
+        simple_edges = [[u, v] for u, v in self._dependency_graph.edges()]
+        
+        graph_serialized = {"nodes": nodes, "edges": simple_edges}
 
         graph_id = None
         try:

@@ -4,84 +4,182 @@ import io
 import os
 import logging
 import json
-# ייבוא הנתיב המשותף כדי שהשרת ידע איפה לחפש את הגרפים
-from src.services.repository_scanner import RepositoryScanner, MCP_STORAGE_DIR 
-from src.services.graph_generator import GraphGenerator
-from src.services.ai_consultant import AIConsultant
-from src.models.schemas import ScanResult, MapResult, AIAnalysis
 
-# --- FIX FOR WINDOWS ENCODING ---
+# --- Windows Encoding Fix ---
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
-# --------------------------------
 
-# Ensure an MCP-managed logs directory exists and use a daily rotating file handler (keep 5 days)
-from logging.handlers import TimedRotatingFileHandler
+# Import Services
+from src.services.repository_scanner import RepositoryScanner, MCP_STORAGE_DIR
+from src.services.graph_generator import GraphGenerator
+from src.services.ai_analyzer import AIAnalyzer
+from src.models.schemas import ScanResult, MapResult
 
-logs_dir = os.path.join(os.path.dirname(MCP_STORAGE_DIR), "logs")
-os.makedirs(logs_dir, exist_ok=True)
-log_file = os.path.join(logs_dir, "server.log")
+# Logging Configuration
+logging.basicConfig(
+    filename='server.log',
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(message)s'
+)
 
-handler = TimedRotatingFileHandler(log_file, when="midnight", interval=1, backupCount=5, encoding="utf-8")
-handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(message)s'))
-
-root_logger = logging.getLogger()
-root_logger.setLevel(logging.INFO)
-root_logger.addHandler(handler)
-# Also keep logging to stdout for convenience during development
-root_logger.addHandler(logging.StreamHandler(sys.stdout))
-
+# Initialize MCP Server
 mcp = FastMCP("Code Cartographer")
 
+# Initialize Tools
 scanner = RepositoryScanner()
-graph_generator = GraphGenerator()
-ai_consultant = AIConsultant()
+graph_gen = GraphGenerator()
+ai_analyzer = AIAnalyzer()
 
+# --- Helper: Load Graph & Metadata from Disk ---
+def _load_graph_from_disk(graph_id: str):
+    path = os.path.join(MCP_STORAGE_DIR, f"{graph_id}.json")
+    if not os.path.exists(path):
+        return None
+    
+    with open(path, "r", encoding="utf-8") as f: 
+        data = json.load(f)
+    
+    import networkx as nx
+    g = nx.DiGraph()
+    # Reconstruct Nodes
+    for n in data["nodes"]: 
+        g.add_node(n["id"], **{k:v for k,v in n.items() if k!="id"})
+    # Reconstruct Edges
+    for u,v in data["edges"]: 
+        g.add_edge(u,v, type="explicit") # Mark standard imports as 'explicit'
+        
+    return g, data
 
 @mcp.tool()
 def scan_repository(path: str = ".") -> ScanResult:
-    """Scans Python files to build a dependency graph."""
-    logging.info(f"Tool called: scan_repository with path={path}")
+    """
+    1. Scans the codebase.
+    2. Builds the dependency graph.
+    3. Returns a Graph ID for further analysis.
+    """
+    logging.info(f"🚀 Tool called: scan_repository with path={path}")
     return scanner.scan(path)
 
-
 @mcp.tool()
-def generate_architecture_map(graph_id: str) -> MapResult:
+def generate_quick_map(graph_id: str) -> MapResult:
     """
-    Generates a PNG graph of the architecture.
-    Expects a `graph_id` returned by `scan_repository`.
-    The graph is loaded from the MCP server's internal storage.
-    """
-    logging.info(f"Tool called: generate_architecture_map with graph_id={graph_id}")
+    🎨 VISUALIZER: Generates the architectural map PNG.
     
-    try:
-        # טעינה מהתיקייה הפנימית הקבועה (mcp_storage/graphs)
-        graph_path = os.path.join(MCP_STORAGE_DIR, f"{graph_id}.json")
+    Smart Behavior:
+    - If 'run_architectural_mri' was run previously, this tool AUTOMATICALLY 
+      detects the data and visualizes the Risk Heatmap & Shadow Links (Red/Orange bubbles).
+    - If no MRI data exists, it renders a clean, structural map (Blue bubbles).
+    """
+    logging.info(f"⚡ Tool called: generate_quick_map (Graph: {graph_id})")
+    
+    loaded = _load_graph_from_disk(graph_id)
+    if not loaded:
+        return MapResult(success=False, message=f"Graph ID {graph_id} not found.")
+    
+    g, data = loaded
+    
+    # Check for cached AI insights to hydrate the map
+    risk_scores = {}
+    hidden_links = []
+    
+    if "ai_analysis" in data:
+        logging.info("🎨 MRI data detected in cache. Generating Risk Heatmap...")
+        cached = data["ai_analysis"]
+        risk_scores = cached.get("risk_scores", {})
+        hidden_links = cached.get("hidden_links", [])
         
-        if not os.path.exists(graph_path):
-             logging.error(f"Graph file not found: {graph_path}")
-             return MapResult(success=False, message=f"Graph ID {graph_id} not found locally.")
-             
-        with open(graph_path, "r", encoding="utf-8") as gf:
-            graph_serialized = json.load(gf)
-            
-    except Exception as e:
-        logging.exception("Failed to read graph file")
-        return MapResult(success=False, message=str(e))
+        # Inject hidden links into the graph object temporarily for drawing
+        # This creates the dashed red lines!
+        count = 0
+        for link in hidden_links:
+            if link["source"] in g and link["target"] in g:
+                g.add_edge(link["source"], link["target"], type="hidden")
+                count += 1
+        logging.info(f"   -> Added {count} hidden links to visualization.")
+    else:
+        logging.info("🎨 No MRI data found. Generating Standard Structural Map...")
 
-    # Save generated images under the MCP storage images folder and return the saved path
-    images_root = os.path.join(os.path.dirname(MCP_STORAGE_DIR), "images")
-    return graph_generator.generate(graph_serialized, return_image=False, storage_dir=images_root)
-
+    # Delegate to the renderer
+    # If risk_scores is empty, it defaults to the Blue/Clean theme.
+    return graph_gen.generate_mri_view(g, risk_scores=risk_scores)
 
 @mcp.tool()
-async def consult_ai_architect(module_name: str) -> AIAnalysis:
-    """Uses Gemini API to analyze a module."""
-    logging.info(f"Tool called: consult_ai_architect with module={module_name}")
-    return await ai_consultant.analyze(module_name, scanner.get_graph())
+async def run_architectural_mri(graph_id: str, force_refresh: bool = False) -> MapResult:
+    """
+    🏥 ANALYZER: Performs the AI Risk Assessment & Shadow Link detection.
+    
+    Output:
+    - Returns a TEXT REPORT highlighting top risks and hidden dependencies.
+    - Saves results to cache (so 'generate_quick_map' can visualize them later).
+    - NOTE: This tool does NOT generate an image itself.
+    """
+    logging.info(f"🏥 Tool called: run_architectural_mri (Graph: {graph_id}, Force: {force_refresh})")
+    
+    loaded = _load_graph_from_disk(graph_id)
+    if not loaded:
+        return MapResult(success=False, message=f"Graph ID {graph_id} not found.")
+    
+    g, data = loaded
 
+    # --- Smart Caching Logic ---
+    risk_scores = {}
+    hidden_links = []
+    
+    if not force_refresh and "ai_analysis" in data:
+        logging.info("🚀 Cache Hit! Using existing AI results.")
+        cached = data["ai_analysis"]
+        risk_scores = cached.get("risk_scores", {})
+        hidden_links = cached.get("hidden_links", [])
+    
+    else:
+        logging.info("🧠 Cache Miss. Initiating AI Analysis (Gemini)...")
+        # Run the heavy AI processing
+        risk_scores, hidden_links = await ai_analyzer.run_mri_scan(g)
+        
+        # Persist results to disk
+        data["ai_analysis"] = {
+            "risk_scores": risk_scores,
+            "hidden_links": hidden_links
+        }
+        path = os.path.join(MCP_STORAGE_DIR, f"{graph_id}.json")
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+        logging.info("💾 AI results saved to cache.")
+
+    # --- Generate Textual Report (Markdown) ---
+    top_risks = sorted(risk_scores.items(), key=lambda x: x[1], reverse=True)[:3]
+    
+    report = ["# 🏥 Architectural MRI Report\n"]
+    
+    # Section 1: Risks
+    if top_risks:
+        report.append("### 🚨 Critical Risk Hotspots:")
+        for name, score in top_risks:
+            report.append(f"1. **`{name}`** (Risk Score: {score}/10)")
+    else:
+        report.append("### ✅ System Health: Excellent. No high-risk modules found.")
+    
+    report.append("")
+    
+    # Section 2: Hidden Links
+    if hidden_links:
+        report.append(f"### 👻 Shadow Dependencies ({len(hidden_links)} found):")
+        for link in hidden_links[:3]:
+            report.append(f"- **{link['source']}** ➡️ **{link['target']}** (via {link.get('type', 'Unknown')})")
+        if len(hidden_links) > 3:
+            report.append(f"- ...and {len(hidden_links)-3} more.")
+    else:
+        report.append("### 👁️ Visibility: 100%. No hidden dependencies detected.")
+
+    report.append("\n💡 **Next Step:** Run `generate_quick_map` to see the visualization.")
+
+    return MapResult(
+        success=True,
+        message="\n".join(report),
+        node_count=g.number_of_nodes(),
+        edge_count=g.number_of_edges()
+    )
 
 if __name__ == "__main__":
-    # ודא שהתיקייה קיימת בהתחלה
     os.makedirs(MCP_STORAGE_DIR, exist_ok=True)
     mcp.run()

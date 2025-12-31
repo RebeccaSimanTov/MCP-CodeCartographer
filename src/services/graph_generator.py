@@ -3,183 +3,158 @@ import io
 import uuid
 import base64
 import logging
+import shutil
 import networkx as nx
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
 from typing import Union, Optional
 from ..models.schemas import MapResult
+from .repository_scanner import MCP_STORAGE_DIR
 
 class GraphGenerator:
-    """Service for creating an engineering-style flowchart visualization (Top-Down)."""
+    """
+    Service for creating an Architectural MRI visualization using a Hierarchical (Top-Down) Layout.
+    Ensures a TREE structure even if the graph has cycles or hidden links.
+    """
     
     def __init__(self, default_filename: str = "architecture_map.png"):
         self.default_filename = default_filename
-    
-    def generate(self, graph: Union[nx.DiGraph, dict], filename: Optional[str] = None, return_image: bool = False, storage_dir: Optional[str] = None) -> MapResult:
-        # Convert serialized graph to networkx if needed
-        if isinstance(graph, dict):
-            g = nx.DiGraph()
-            for node in graph.get("nodes", []):
-                if isinstance(node, dict):
-                    node_id = node.get("id")
-                    attrs = {k: v for k, v in node.items() if k != "id"}
-                    g.add_node(node_id, **attrs)
-                else:
-                    g.add_node(node)
-            for u, v in graph.get("edges", []):
-                g.add_edge(u, v)
-        else:
-            g = graph
 
-        if g.number_of_nodes() == 0:
-            logging.warning("Attempted to generate map with empty graph")
-            return MapResult(success=False, message="Graph is empty.")
-
-        filename = filename or self.default_filename
-
-        try:
-            # If a storage_dir is provided, write file atomically into <storage_dir>/images
-            saved_path = None
-            saved_filename = None
-            if storage_dir:
-                # storage_dir is expected to be the final images directory (no extra nesting)
-                images_dir = os.path.abspath(storage_dir)
-                os.makedirs(images_dir, exist_ok=True)
-                saved_filename = f"{uuid.uuid4().hex}.png"
-                final_path = os.path.join(images_dir, saved_filename)
-                tmp_path = final_path + ".tmp"
-                # Draw directly to temp file and atomically replace
-                self._create_engineering_flowchart(g, tmp_path)
-                try:
-                    os.replace(tmp_path, final_path)
-                except Exception:
-                    os.rename(tmp_path, final_path)
-                saved_path = os.path.abspath(final_path)
-                logging.info(f"Flowchart saved to {saved_path}")
-
-            node_count = g.number_of_nodes()
-            edge_count = g.number_of_edges()
-
-            # If return_image requested, always render to memory too
-            image_b64 = None
-            if return_image:
-                buf = io.BytesIO()
-                self._create_engineering_flowchart(g, buf)
-                buf.seek(0)
-                raw_bytes = buf.getvalue()
-                image_b64 = base64.b64encode(raw_bytes).decode("ascii")
-                logging.info(f"Flowchart generated in-memory ({node_count} nodes)")
-
-            # Compose MapResult
-            result = MapResult(
-                filename=saved_filename if saved_filename else filename,
-                path=saved_path if saved_path else (os.path.abspath(filename) if not storage_dir else saved_path),
-                success=True,
-                node_count=node_count,
-                edge_count=edge_count,
-                message=("Flowchart generated." if not saved_path else f"Flowchart saved: {saved_path}"),
-                image_bytes=image_b64,
-                content_type=("image/png" if image_b64 else None),
-            )
-            
-            if saved_filename and hasattr(result, 'image_filename'):
-                 result.image_filename = saved_filename
-            if saved_path and hasattr(result, 'image_path'):
-                 result.image_path = saved_path
-
-            return result
-
-        except Exception as e:
-            error_msg = f"Failed to generate map: {e}"
-            logging.error(error_msg, exc_info=True)
-            return MapResult(success=False, message=error_msg)
-
-    def _format_label(self, label: str) -> str:
+    def generate_mri_view(self, graph: nx.DiGraph, risk_scores: Optional[dict] = None, filename: Optional[str] = None, storage_dir: Optional[str] = None, return_image: bool = True) -> MapResult:
         """
-        מפרמט את התווית לתצוגה אנכית ברורה.
-        שובר שורה *אחרי* כל נקודה או קו תחתי, אך משאיר אותם.
+        Generates the MRI view.
+        CRITICAL FIX: Calculates layout based on a 'clean' DAG to force a tree shape,
+        then overlays the complex connections (red lines) on top.
         """
-        # מחליף נקודה ב"נקודה + ירידת שורה"
-        formatted = label.replace(".", ".\n")
-        # מחליף קו תחתי ב"קו תחתי + ירידת שורה"
-        formatted = formatted.replace("_", "_\n")
-        return formatted
-    
-    def _create_engineering_flowchart(self, graph: nx.DiGraph, file_or_path):
-        # 1. קנבס ענק
-        plt.figure(figsize=(28, 22))
-        
-        # 2. חישוב מיקומים (Strict Grid)
+        risk_scores = risk_scores or {}
+
+        node_count = graph.number_of_nodes()
+        edge_count = graph.number_of_edges()
+
+        # 1. Canvas Setup
+        plt.figure(figsize=(28, 24))
+        ax = plt.gca()
+
+        # 2. Robust Hierarchical Layout Logic
         pos = {}
         try:
-            layers = list(nx.topological_generations(graph))
+            # Step A: build a 'skeleton' graph for computing positions only
+            # Copy the graph and remove anything that prevents forming a tree
+            layout_g = nx.DiGraph()
+            layout_g.add_nodes_from(graph.nodes())
+            
+            # Use only regular (explicit) edges; ignore red (hidden) ones for layout
+            explicit_edges = [(u, v) for u, v, d in graph.edges(data=True) if d.get("type") != "hidden"]
+            layout_g.add_edges_from(explicit_edges)
+
+            # Step B: cycle breaking
+            # If there's a cyclic dependency, topological generation fails. We'll break cycles forcibly.
+            try:
+                while not nx.is_directed_acyclic_graph(layout_g):
+                    # Find a cycle and break it (remove its last edge)
+                    cycle = nx.find_cycle(layout_g)
+                    layout_g.remove_edge(cycle[-1][0], cycle[-1][1])
+            except Exception:
+                pass # if it fails, continue with fallback
+
+            # Step C: compute layers (the resulting tree)
+            layers = list(nx.topological_generations(layout_g))
+            
             y_gap = 10.0 
             x_gap = 8.0  
+            
             for i, layer in enumerate(layers):
-                for j, node in enumerate(layer):
+                sorted_layer = sorted(layer)
+                for j, node in enumerate(sorted_layer):
                     x = (j - (len(layer) - 1) / 2) * x_gap
                     y = -i * y_gap
                     pos[node] = (x, y)
-        except Exception:
-            logging.warning("Fallback layout used.")
-            pos = nx.spring_layout(graph, k=4.0)
+                    
+        except Exception as e:
+            logging.warning(f"Layout fallback triggered: {e}")
+            # As a last-resort fallback, use spring layout
+            pos = nx.spring_layout(graph, k=4.0, iterations=50)
 
-        # 3. עיצוב
-        degrees = dict(graph.degree())
-        node_colors = [degrees.get(n, 0) for n in graph.nodes()]
+        # 3. Risk Calculation (Size & Color)
+        node_sizes = []
+        node_colors = []
+        base_size = 14000
         
-        # שימוש בפונקציית העיצוב החדשה
-        formatted_labels = {node: self._format_label(node) for node in graph.nodes()}
-        
-        NODE_SIZE = 14000 
+        try: centrality = nx.in_degree_centrality(graph)
+        except: centrality = {n:0 for n in graph.nodes()}
 
-        # 4. ציור קווים הנדסיים
-        ax = plt.gca()
-        for u, v in graph.edges():
+        for node in graph.nodes():
+            complexity = risk_scores.get(node, 1)
+            impact = (centrality.get(node, 0) * 10) + 1
+            risk = complexity * impact
+            
+            node_sizes.append(base_size * (1 + risk/30.0))
+            
+            if risk > 20:
+                node_colors.append(plt.cm.Reds(min(0.8, 0.3 + risk/50.0)))
+            else:
+                blue_val = 0.2 + min(0.6, centrality.get(node, 0)*3)
+                node_colors.append(plt.cm.Blues(blue_val))
+
+        # 4. Draw Edges (Visible Arrows Fix)
+        for u, v, data in graph.edges(data=True):
+            is_hidden = data.get("type") == "hidden"
+            
             connection_style = "arc,angleA=-90,angleB=90,rad=15"
-            try:
-                if abs(pos[u][1] - pos[v][1]) < y_gap * 1.1:
-                    style = "solid"
-                    width = 2.0
-                    color = "#666666"
-                else:
-                    style = "dashed" 
-                    width = 1.5
-                    color = "#999999"
-                    connection_style = "arc,angleA=-90,angleB=90,rad=30"
-            except:
-                style = "solid"
-                width = 2.0
-                color = "gray"
+            
+            if is_hidden:
+                # hidden links (MRI) - red & dashed
+                color = "#FF0000"
+                style = "dashed"
+                width = 3.5
+                alpha = 0.9
+                connection_style = "arc3,rad=-0.4"
+            else:
+                # regular connections - gray/black
+                try:
+                    if abs(pos[u][1] - pos[v][1]) > y_gap * 1.1:
+                         style = "dashed"
+                         width = 1.5
+                         color = "#999999"
+                         connection_style = "arc,angleA=-90,angleB=90,rad=30"
+                         alpha = 0.7
+                    else:
+                        style = "solid"
+                        width = 2.0
+                        color = "#555555"
+                        alpha = 0.8
+                except:
+                    style = "solid"; width=2.0; color="gray"; alpha=0.8
 
             nx.draw_networkx_edges(
                 graph, pos,
-                edgelist=[(u, v)],
+                edgelist=[(u,v)],
                 edge_color=color,
-                arrows=True,
-                arrowsize=25,
-                width=width,
-                node_size=NODE_SIZE,
-                connectionstyle=connection_style,
                 style=style,
-                min_source_margin=25,
-                min_target_margin=25,
+                width=width,
+                alpha=alpha,
+                connectionstyle=connection_style,
+                arrows=True,
+                arrowsize=35,
+                arrowstyle='-|>',
+                min_source_margin=75,
+                min_target_margin=75,
                 ax=ax
             )
 
-        # 5. ציור צמתים
+        # 5. Draw Nodes (Squares)
         nx.draw_networkx_nodes(
             graph, pos,
-            node_size=NODE_SIZE,
+            node_size=node_sizes,
             node_color=node_colors,
-            cmap=plt.cm.Blues,
             node_shape="s",
-            alpha=1.0,
-            edgecolors="black",
+            edgecolors="#222222",
             linewidths=3.0,
-            margins=0.15
+            alpha=1.0
         )
 
-        # 6. ציור טקסט (פונט בגודל 10 כדי שייכנס טוב)
+        # 6. Labels
+        formatted_labels = {node: self._format_label(node) for node in graph.nodes()}
         nx.draw_networkx_labels(
             graph, pos,
             labels=formatted_labels,
@@ -187,12 +162,64 @@ class GraphGenerator:
             font_weight="bold",
             font_family="sans-serif"
         )
-        
-        plt.title("System Architecture (Hierarchical View)", fontsize=30, pad=50)
-        ax.margins(0.30)
+
+        # Title
+        title = "System Architecture (Hierarchical MRI)"
+        if risk_scores: title += "\n(Red = High Risk / Hidden Links)"
+        plt.title(title, fontsize=32, pad=60)
         plt.axis("off")
-        
+
+        # 7. Render & Save
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png', bbox_inches='tight', dpi=150)
+        buf.seek(0)
+        raw_bytes = buf.getvalue()
+        plt.close()
+
+        # Persist Logic
+        mcp_images_dir = os.path.join(os.path.dirname(MCP_STORAGE_DIR), "images")
+        os.makedirs(mcp_images_dir, exist_ok=True)
+        image_filename = filename if filename else f"{uuid.uuid4().hex}.png"
+        mcp_final_path = os.path.join(mcp_images_dir, image_filename)
+
         try:
-            plt.savefig(file_or_path, format='png', bbox_inches='tight', dpi=150)
-        finally:
-            plt.close()
+            with open(mcp_final_path, "wb") as f:
+                f.write(raw_bytes)
+        except Exception:
+            logging.exception("Failed to persist MRI image")
+
+        caller_path = None
+        if storage_dir:
+            try:
+                os.makedirs(storage_dir, exist_ok=True)
+                caller_path = os.path.join(os.path.abspath(storage_dir), image_filename)
+                if os.path.abspath(caller_path) != os.path.abspath(mcp_final_path):
+                    shutil.copyfile(mcp_final_path, caller_path)
+            except Exception:
+                logging.exception("Failed to copy image to caller storage")
+
+        result = MapResult(
+            filename=image_filename,
+            path=os.path.abspath(mcp_final_path),
+            success=True,
+            node_count=node_count,
+            edge_count=edge_count,
+            message="Hierarchical MRI generated with visible arrows.",
+            image_bytes=base64.b64encode(raw_bytes).decode("ascii") if return_image else None,
+            content_type="image/png" if return_image else None,
+            image_filename=image_filename,
+            image_path=os.path.abspath(mcp_final_path),
+        )
+
+        if caller_path:
+            result.meta = {"copied_to": caller_path}
+
+        return result
+
+    def generate(self, graph, filename: Optional[str] = None, return_image: bool = False, storage_dir: Optional[str] = None, risk_scores: Optional[dict] = None) -> MapResult:
+        return self.generate_mri_view(graph, risk_scores=risk_scores, filename=filename, storage_dir=storage_dir, return_image=return_image)
+
+    def _format_label(self, label: str) -> str:
+        formatted = label.replace(".", ".\n")
+        formatted = formatted.replace("_", "_\n")
+        return formatted
