@@ -2,12 +2,8 @@ import os
 import ast
 import logging
 import networkx as nx
-import json
-import uuid
 from ..models.schemas import ScanResult
-
-# --- Core setting: MCP internal storage folder ---
-MCP_STORAGE_DIR = os.path.join(os.getcwd(), "mcp_storage", "graphs")
+from .storage_manager import storage  # <-- New: Uses the central storage manager
 
 class ImportVisitor(ast.NodeVisitor):
     """
@@ -45,6 +41,7 @@ class ImportVisitor(ast.NodeVisitor):
 class RepositoryScanner:
     """
     Scans a directory, finds Python files, and builds a Dependency Graph.
+    Delegates persistence to the StorageManager.
     """
     
     def __init__(self):
@@ -135,40 +132,28 @@ class RepositoryScanner:
                 for imp in visitor.imports:
                     target = self._resolve_import(imp)
                     if target and target != module_name:
-                        # --- Important change: add type="explicit" ---
-                        # This indicates: "this is a real import from the code; draw it as a normal line"
+                        # Add type="explicit" for visualization logic
                         self._dependency_graph.add_edge(module_name, target, type="explicit")
                         
             except Exception as e:
                 logging.warning(f"Error parsing {full_path}: {e}")
                 pass
 
-        # 3. Save & finish
+        # 3. Save & finish via StorageManager
         most_central = self._find_most_central_node()
 
         # Convert to JSON (supports NetworkX attributes)
         nodes = [{"id": n, **attrs} for n, attrs in self._dependency_graph.nodes(data=True)]
-        edges = [[u, v, attrs] for u, v, attrs in self._dependency_graph.edges(data=True)]
-        
-        # In the simple version we only store [u, v], but here we could keep attributes for future use.
-        # For full compatibility with current server.py, we use a simple edges format,
-        # as the server's ScanResult reloads and adds explicit edges if missing.
-        # Keeping a simpler file format avoids schema complications.
         simple_edges = [[u, v] for u, v in self._dependency_graph.edges()]
         
         graph_serialized = {"nodes": nodes, "edges": simple_edges}
 
-        graph_id = None
+        # --- KEY CHANGE: Use storage manager instead of direct file write ---
+        # This handles index updates and cleaning old files automatically
         try:
-            os.makedirs(MCP_STORAGE_DIR, exist_ok=True)
-            graph_id = uuid.uuid4().hex
-            final_path = os.path.join(MCP_STORAGE_DIR, f"{graph_id}.json")
-            
-            with open(final_path, "w", encoding="utf-8") as gf:
-                json.dump(graph_serialized, gf, ensure_ascii=False, indent=2)
-            
+            graph_id = storage.save_scan(target_path, graph_serialized)
         except Exception:
-            logging.exception("Failed to persist graph")
+            logging.exception("Failed to persist graph via StorageManager")
             graph_id = None
         
         return ScanResult(
