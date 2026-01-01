@@ -35,7 +35,7 @@ It doesn't just draw; it understands. The AI detects **"Shadow Links"** (logical
 * **🕵️ Smart Repository Scanning:** * Parses Python AST to build a precise dependency graph.
     * Automatically handles imports and project structure.
 * **🏥 Architectural MRI:**
-    * **Risk Heatmap:** Identifies high-complexity modules and "God Classes" (Red Nodes).
+    * **Risk Heatmap:** Identifies high-complexity modules and tightly coupled components (Red Nodes).
     * **Shadow Link Detection:** Finds implicit coupling (e.g., Service A writes to `users` table, Service B reads from it).
 * **🎨 Intelligent Visualization:**
     * Generates high-res PNG maps.

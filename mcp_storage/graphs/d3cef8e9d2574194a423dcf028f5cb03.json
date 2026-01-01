@@ -124,16 +124,16 @@
     "risk_scores": {
       "src.agents.langchain_orchestrator": 8,
       "src.services.db_utils": 2,
-      "src.llm.llm_factory": 5,
+      "src.llm.llm_factory": 6,
       "src.services.rabbitmq_rpc_client": 3,
-      "src.services.nl_to_dsl_service": 6,
-      "src.services.tools_registry": 9,
-      "src.llm.llm_config": 4,
-      "src.server.chat_session": 7,
-      "src.server.websocket_server": 2,
-      "src.services.workers.mcp_bridge_worker": 4,
-      "src.services.workers.standalone_worker": 5,
-      "src.workers.orchestrator_worker": 9,
+      "src.services.nl_to_dsl_service": 7,
+      "src.services.tools_registry": 8,
+      "src.llm.llm_config": 9,
+      "src.server.chat_session": 8,
+      "src.server.websocket_server": 3,
+      "src.services.workers.mcp_bridge_worker": 5,
+      "src.services.workers.standalone_worker": 9,
+      "src.workers.orchestrator_worker": 10,
       "src.workers.standalone_worker": 1
     },
     "hidden_links": [
@@ -141,32 +141,29 @@
         "source": "src.server.chat_session",
         "target": "src.workers.orchestrator_worker",
         "type": "Shared Queue 'orchestrator'"
-      },
-      {
-        "source": "src.services.tools_registry",
-        "target": "src.services.workers.standalone_worker",
-        "type": "Shared Queue 'plan_generator'"
-      },
-      {
-        "source": "src.services.tools_registry",
-        "target": "src.services.workers.standalone_worker",
-        "type": "Shared Queue 'plan_reviewer'"
-      },
-      {
-        "source": "src.services.tools_registry",
-        "target": "src.services.workers.standalone_worker",
-        "type": "Shared Queue 'ui_agent'"
-      },
-      {
-        "source": "src.services.tools_registry",
-        "target": "src.services.workers.standalone_worker",
-        "type": "Shared Queue 'persona_search'"
-      },
-      {
-        "source": "src.server.websocket_server",
-        "target": "src.server.chat_session",
-        "type": "API '/ws/chat'"
       }
-    ]
+    ],
+    "module_analysis": {
+      "module": "src.agents.langchain_orchestrator",
+      "dependencies": [
+        "src.services.db_utils",
+        "src.llm.llm_factory",
+        "src.services.rabbitmq_rpc_client",
+        "src.services.nl_to_dsl_service",
+        "src.services.tools_registry"
+      ],
+      "used_by": [
+        "src.server.chat_session",
+        "src.workers.orchestrator_worker"
+      ],
+      "analysis": "# 🏥 Architectural MRI Report\n\n### 🚨 Critical Risk Hotspots:\n1. **`src.workers.orchestrator_worker`** (Risk Score: 10/10)\n1. **`src.llm.llm_config`** (Risk Score: 9/10)\n1. **`src.services.workers.standalone_worker`** (Risk Score: 9/10)\n1. **`src.agents.langchain_orchestrator`** (Risk Score: 8/10)\n1. **`src.services.tools_registry`** (Risk Score: 8/10)\n1. **`src.server.chat_session`** (Risk Score: 8/10)\n1. **`src.services.nl_to_dsl_service`** (Risk Score: 7/10)\n1. **`src.llm.llm_factory`** (Risk Score: 6/10)\n1. **`src.services.workers.mcp_bridge_worker`** (Risk Score: 5/10)\n1. **`src.services.rabbitmq_rpc_client`** (Risk Score: 3/10)\n1. **`src.server.websocket_server`** (Risk Score: 3/10)\n1. **`src.services.db_utils`** (Risk Score: 2/10)\n1. **`src.workers.standalone_worker`** (Risk Score: 1/10)\n\n### 👻 Shadow Dependencies (1 found):\n- **src.server.chat_session** ➡️ **src.workers.orchestrator_worker** (via Shared Queue 'orchestrator')\n\n💡 **Next Step:** Run `generate_quick_map` to see the visualization.",
+      "simulated": false,
+      "meta": {
+        "node_count": 13,
+        "edge_count": 13,
+        "graph_id": "d3cef8e9d2574194a423dcf028f5cb03"
+      },
+      "errors": []
+    }
   }
 }

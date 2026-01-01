@@ -28,8 +28,6 @@ class ScanResult(BaseModel):
 
 
 class MapResult(BaseModel):
-    filename: Optional[str] = None
-    path: Optional[str] = None
     success: bool = True
     node_count: int = 0
     edge_count: int = 0
