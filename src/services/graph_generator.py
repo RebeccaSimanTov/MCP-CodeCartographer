@@ -1,30 +1,25 @@
-import os
 import io
-import uuid
 import base64
 import logging
-import shutil
 import networkx as nx
 import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-from typing import Union, Optional
+from typing import Optional
 from ..models.schemas import MapResult
-from .repository_scanner import MCP_STORAGE_DIR
 
 class GraphGenerator:
     """
-    Service for creating an Architectural MRI visualization using a Hierarchical (Top-Down) Layout.
-    Ensures a TREE structure even if the graph has cycles or hidden links.
+    Service for creating an Architectural MRI visualization.
+    Refactored to be a 'Pure Service': It generates the image bytes but delegates 
+    persistence (saving to disk) to the StorageManager (via the caller).
     """
     
-    def __init__(self, default_filename: str = "architecture_map.png"):
-        self.default_filename = default_filename
+    def __init__(self):
+        pass
 
-    def generate_mri_view(self, graph: nx.DiGraph, risk_scores: Optional[dict] = None, filename: Optional[str] = None, storage_dir: Optional[str] = None, return_image: bool = True) -> MapResult:
+    def generate_mri_view(self, graph: nx.DiGraph, risk_scores: Optional[dict] = None) -> MapResult:
         """
-        Generates the MRI view.
-        CRITICAL FIX: Calculates layout based on a 'clean' DAG to force a tree shape,
-        then overlays the complex connections (red lines) on top.
+        Generates the MRI view (Hierarchical Tree + Risk/Hidden overlays).
+        Returns a MapResult containing the base64 encoded image string.
         """
         risk_scores = risk_scores or {}
 
@@ -38,28 +33,24 @@ class GraphGenerator:
         # 2. Robust Hierarchical Layout Logic
         pos = {}
         try:
-            # Step A: build a 'skeleton' graph for computing positions only
-            # Copy the graph and remove anything that prevents forming a tree
+            # Create a temporary DAG (Directed Acyclic Graph) for layout calculation
             layout_g = nx.DiGraph()
             layout_g.add_nodes_from(graph.nodes())
             
-            # Use only regular (explicit) edges; ignore red (hidden) ones for layout
+            # Only use explicit edges for the skeleton structure
             explicit_edges = [(u, v) for u, v, d in graph.edges(data=True) if d.get("type") != "hidden"]
             layout_g.add_edges_from(explicit_edges)
 
-            # Step B: cycle breaking
-            # If there's a cyclic dependency, topological generation fails. We'll break cycles forcibly.
+            # Cycle breaking logic
             try:
                 while not nx.is_directed_acyclic_graph(layout_g):
-                    # Find a cycle and break it (remove its last edge)
                     cycle = nx.find_cycle(layout_g)
                     layout_g.remove_edge(cycle[-1][0], cycle[-1][1])
             except Exception:
-                pass # if it fails, continue with fallback
+                pass 
 
-            # Step C: compute layers (the resulting tree)
+            # Calculate layers
             layers = list(nx.topological_generations(layout_g))
-            
             y_gap = 10.0 
             x_gap = 8.0  
             
@@ -72,10 +63,9 @@ class GraphGenerator:
                     
         except Exception as e:
             logging.warning(f"Layout fallback triggered: {e}")
-            # As a last-resort fallback, use spring layout
             pos = nx.spring_layout(graph, k=4.0, iterations=50)
 
-        # 3. Risk Calculation (Size & Color)
+        # 3. Visual Styling (Nodes)
         node_sizes = []
         node_colors = []
         base_size = 14000
@@ -96,21 +86,21 @@ class GraphGenerator:
                 blue_val = 0.2 + min(0.6, centrality.get(node, 0)*3)
                 node_colors.append(plt.cm.Blues(blue_val))
 
-        # 4. Draw Edges (Visible Arrows Fix)
+        # 4. Visual Styling (Edges)
         for u, v, data in graph.edges(data=True):
             is_hidden = data.get("type") == "hidden"
-            
-            connection_style = "arc,angleA=-90,angleB=90,rad=15"
+            # Ensure connection_style is always defined to avoid UnboundLocalError
+            connection_style = "arc3,rad=0.0"
             
             if is_hidden:
-                # hidden links (MRI) - red & dashed
+                # MRI Style (Hidden)
                 color = "#FF0000"
                 style = "dashed"
                 width = 3.5
                 alpha = 0.9
                 connection_style = "arc3,rad=-0.4"
             else:
-                # regular connections - gray/black
+                # Engineering Style (Explicit)
                 try:
                     if abs(pos[u][1] - pos[v][1]) > y_gap * 1.1:
                          style = "dashed"
@@ -142,7 +132,7 @@ class GraphGenerator:
                 ax=ax
             )
 
-        # 5. Draw Nodes (Squares)
+        # 5. Draw Nodes & Labels
         nx.draw_networkx_nodes(
             graph, pos,
             node_size=node_sizes,
@@ -153,7 +143,6 @@ class GraphGenerator:
             alpha=1.0
         )
 
-        # 6. Labels
         formatted_labels = {node: self._format_label(node) for node in graph.nodes()}
         nx.draw_networkx_labels(
             graph, pos,
@@ -169,55 +158,25 @@ class GraphGenerator:
         plt.title(title, fontsize=32, pad=60)
         plt.axis("off")
 
-        # 7. Render & Save
+        # 6. Finalize & Return Bytes (No file saving!)
         buf = io.BytesIO()
         plt.savefig(buf, format='png', bbox_inches='tight', dpi=150)
         buf.seek(0)
         raw_bytes = buf.getvalue()
         plt.close()
 
-        # Persist Logic
-        mcp_images_dir = os.path.join(os.path.dirname(MCP_STORAGE_DIR), "images")
-        os.makedirs(mcp_images_dir, exist_ok=True)
-        image_filename = filename if filename else f"{uuid.uuid4().hex}.png"
-        mcp_final_path = os.path.join(mcp_images_dir, image_filename)
-
-        try:
-            with open(mcp_final_path, "wb") as f:
-                f.write(raw_bytes)
-        except Exception:
-            logging.exception("Failed to persist MRI image")
-
-        caller_path = None
-        if storage_dir:
-            try:
-                os.makedirs(storage_dir, exist_ok=True)
-                caller_path = os.path.join(os.path.abspath(storage_dir), image_filename)
-                if os.path.abspath(caller_path) != os.path.abspath(mcp_final_path):
-                    shutil.copyfile(mcp_final_path, caller_path)
-            except Exception:
-                logging.exception("Failed to copy image to caller storage")
-
-        result = MapResult(
-            filename=image_filename,
-            path=os.path.abspath(mcp_final_path),
+        return MapResult(
             success=True,
             node_count=node_count,
             edge_count=edge_count,
-            message="Hierarchical MRI generated with visible arrows.",
-            image_bytes=base64.b64encode(raw_bytes).decode("ascii") if return_image else None,
-            content_type="image/png" if return_image else None,
-            image_filename=image_filename,
-            image_path=os.path.abspath(mcp_final_path),
+            message="Hierarchical MRI generated.",
+            image_bytes=base64.b64encode(raw_bytes).decode("ascii"),
+            content_type="image/png"
         )
 
-        if caller_path:
-            result.meta = {"copied_to": caller_path}
-
-        return result
-
-    def generate(self, graph, filename: Optional[str] = None, return_image: bool = False, storage_dir: Optional[str] = None, risk_scores: Optional[dict] = None) -> MapResult:
-        return self.generate_mri_view(graph, risk_scores=risk_scores, filename=filename, storage_dir=storage_dir, return_image=return_image)
+    def generate(self, graph, risk_scores: Optional[dict] = None) -> MapResult:
+        """Alias for compatibility"""
+        return self.generate_mri_view(graph, risk_scores)
 
     def _format_label(self, label: str) -> str:
         formatted = label.replace(".", ".\n")

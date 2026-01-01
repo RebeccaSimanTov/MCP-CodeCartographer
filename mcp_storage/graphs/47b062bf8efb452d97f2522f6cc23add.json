@@ -119,5 +119,54 @@
       "src.workers.standalone_worker",
       "src.services.workers.standalone_worker"
     ]
-  ]
+  ],
+  "ai_analysis": {
+    "risk_scores": {
+      "src.agents.langchain_orchestrator": 8,
+      "src.services.db_utils": 2,
+      "src.llm.llm_factory": 5,
+      "src.services.rabbitmq_rpc_client": 3,
+      "src.services.nl_to_dsl_service": 6,
+      "src.services.tools_registry": 9,
+      "src.llm.llm_config": 4,
+      "src.server.chat_session": 7,
+      "src.server.websocket_server": 2,
+      "src.services.workers.mcp_bridge_worker": 4,
+      "src.services.workers.standalone_worker": 5,
+      "src.workers.orchestrator_worker": 9,
+      "src.workers.standalone_worker": 1
+    },
+    "hidden_links": [
+      {
+        "source": "src.server.chat_session",
+        "target": "src.workers.orchestrator_worker",
+        "type": "Shared Queue 'orchestrator'"
+      },
+      {
+        "source": "src.services.tools_registry",
+        "target": "src.services.workers.standalone_worker",
+        "type": "Shared Queue 'plan_generator'"
+      },
+      {
+        "source": "src.services.tools_registry",
+        "target": "src.services.workers.standalone_worker",
+        "type": "Shared Queue 'plan_reviewer'"
+      },
+      {
+        "source": "src.services.tools_registry",
+        "target": "src.services.workers.standalone_worker",
+        "type": "Shared Queue 'ui_agent'"
+      },
+      {
+        "source": "src.services.tools_registry",
+        "target": "src.services.workers.standalone_worker",
+        "type": "Shared Queue 'persona_search'"
+      },
+      {
+        "source": "src.server.websocket_server",
+        "target": "src.server.chat_session",
+        "type": "API '/ws/chat'"
+      }
+    ]
+  }
 }
