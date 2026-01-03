@@ -32,10 +32,6 @@ class MapResult(BaseModel):
     node_count: int = 0
     edge_count: int = 0
     message: Optional[str] = None
-    # Base64-encoded PNG image bytes as a string (safe for JSON transport)
-    image_bytes: Optional[str] = None
-    content_type: Optional[str] = None
-    # When image is persisted on disk, these fields point to it
     image_filename: Optional[str] = None
     image_path: Optional[str] = None
     meta: Optional[Dict[str, Any]] = None

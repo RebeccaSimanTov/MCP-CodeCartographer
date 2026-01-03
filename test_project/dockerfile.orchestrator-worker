@@ -1,0 +1,64 @@
+FROM python:3.11-slim
+
+# --- Install system dependencies ---
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates curl gcc && \
+    rm -rf /var/lib/apt/lists/*
+
+# --- Add NetFree CA ---
+COPY devtools/certs/RL-ca.crt /usr/local/share/ca-certificates/netfree-ca.crt
+RUN chmod 644 /usr/local/share/ca-certificates/netfree-ca.crt && update-ca-certificates
+
+# --- SSL env vars for Python / Pip / Requests ---
+ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
+ENV PIP_CERT=/etc/ssl/certs/ca-certificates.crt
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV GRPC_DEFAULT_SSL_ROOTS_FILE_PATH=/etc/ssl/certs/ca-certificates.crt
+ENV NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt
+ENV CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+# --- ALLOW DOCKER-COMPOSE ENV TO OVERRIDE ---
+ENV S3_ENDPOINT_URL=""
+ENV S3_PUBLIC_BASE_URL=""
+ENV UI_TESTER_URL=""
+ENV SITE_MAPPER_URL=""
+ENV TENANT_API_URL=""
+ENV OPENAI_API_KEY=""
+ENV GEMINI_API_KEY=""
+ENV MODEL_NAME=""
+
+# --- Working directory ---
+WORKDIR /app
+
+# Copy common and utils dependencies first
+COPY ./common /app/common
+COPY ./dsl-schemas /app/dsl-schemas
+COPY ./tests /app/tests
+
+# Copy orchestrator code
+COPY ./orchestrator /app/orchestrator
+
+# Ensure DSL schemas are in the expected location
+RUN mkdir -p /app/common/dsl_schemas && \
+    cp -r /app/dsl-schemas/* /app/common/dsl_schemas/ || true
+
+# Create required directories
+RUN mkdir -p /app/tests/plans/default_tenant && \
+    chmod -R 777 /app/tests/plans
+
+# Change to orchestrator directory for uv sync
+WORKDIR /app/orchestrator
+
+# --- Install pip + uv ---
+RUN pip install --upgrade pip --cert /etc/ssl/certs/ca-certificates.crt
+RUN pip install --no-cache-dir uv --cert /etc/ssl/certs/ca-certificates.crt
+
+# --- Install dependencies using uv ---
+RUN uv sync
+
+# Set Python path to include all needed directories
+ENV PYTHONPATH=/app:/app/common:/app/utils:/app/orchestrator
+ENV PYTHONUNBUFFERED=1
+
+# Run orchestrator worker
+CMD ["uv", "run", "python", "-u", "src/workers/orchestrator_worker.py"]

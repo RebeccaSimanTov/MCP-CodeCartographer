@@ -2,10 +2,11 @@
 
 > **Turn spaghetti code into clear, hierarchical maps. Detect hidden risks. Onboard faster.**
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![MCP](https://img.shields.io/badge/MCP-Enabled-green)
-![AI](https://img.shields.io/badge/AI-Gemini%202.5-orange)
-![License](https://img.shields.io/badge/License-MIT-lightgrey)
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)
+![Manager](https://img.shields.io/badge/uv-blazing%20fast-purple)
+![MCP](https://img.shields.io/badge/MCP-Server-green)
+![AI](https://img.shields.io/badge/AI-Gemini%202.5%20Flash-orange?logo=google-gemini&logoColor=white)
+![Graph](https://img.shields.io/badge/Graph-NetworkX-darkblue)
 
 **Code Cartographer** is an intelligent MCP (Model Context Protocol) server that acts as a visual GPS for your codebase. 
 
@@ -153,9 +154,3 @@ Once connected, simply talk to Claude to operate the tool:
 | Visualize Risks   | `Show me the map again.` *(Shows Red / MRI Map)*                                |
 | Deep Dive         | `What is the context of the billing_service module?`                            |
 | Check Stats       | `Show me the architecture statistics.`                                          |
-
-------------------------------------------------------------------------
-
-## 🛡️ License
-
-This project is licensed under the MIT License.

@@ -95,18 +95,10 @@ def generate_quick_map(graph_id: str) -> MapResult:
     else:
         logging.info("🎨 No MRI data found. Generating Standard Structural Map...")
 
-    # Generate Image (Returns bytes, does not save file itself)
-    result = graph_gen.generate_mri_view(g, risk_scores=risk_scores)
-    
-    # Save the image using StorageManager
-    if result.success and result.image_bytes:
-        import base64
-        image_data = base64.b64decode(result.image_bytes)
-        saved_path = storage.save_image(graph_id, image_data)
-        
-        # Update result with the physical path
-        result.image_path = saved_path
-        result.image_filename = f"{graph_id}.png"
+    # Generate Image (GraphGenerator will persist the image and return path)
+    result = graph_gen.generate_mri_view(g, risk_scores=risk_scores, graph_id=graph_id)
+    if result.success and result.image_path:
+        logging.info(f"Saved image to {result.image_path}")
 
     return result
 

@@ -1,10 +1,11 @@
 import io
-import base64
 import logging
+import uuid
 import networkx as nx
 import matplotlib.pyplot as plt
 from typing import Optional
 from ..models.schemas import MapResult
+from .storage_manager import storage
 
 class GraphGenerator:
     """
@@ -16,10 +17,11 @@ class GraphGenerator:
     def __init__(self):
         pass
 
-    def generate_mri_view(self, graph: nx.DiGraph, risk_scores: Optional[dict] = None) -> MapResult:
+    def generate_mri_view(self, graph: nx.DiGraph, risk_scores: Optional[dict] = None, graph_id: Optional[str] = None) -> MapResult:
         """
         Generates the MRI view (Hierarchical Tree + Risk/Hidden overlays).
-        Returns a MapResult containing the base64 encoded image string.
+        Persists the PNG image to disk using StorageManager and returns a MapResult
+        that points to the saved file (no raw image bytes are returned).
         """
         risk_scores = risk_scores or {}
 
@@ -158,20 +160,23 @@ class GraphGenerator:
         plt.title(title, fontsize=32, pad=60)
         plt.axis("off")
 
-        # 6. Finalize & Return Bytes (No file saving!)
+        # 6. Finalize & Persist Image (saved to disk; no raw bytes returned)
         buf = io.BytesIO()
         plt.savefig(buf, format='png', bbox_inches='tight', dpi=150)
         buf.seek(0)
         raw_bytes = buf.getvalue()
         plt.close()
 
+        used_id = graph_id or uuid.uuid4().hex
+        saved_path = storage.save_image(used_id, raw_bytes)
+
         return MapResult(
             success=True,
             node_count=node_count,
             edge_count=edge_count,
-            message="Hierarchical MRI generated.",
-            image_bytes=base64.b64encode(raw_bytes).decode("ascii"),
-            content_type="image/png"
+            message=f"Hierarchical MRI generated and saved to {saved_path}",
+            image_filename=f"{used_id}.png",
+            image_path=saved_path
         )
 
     def generate(self, graph, risk_scores: Optional[dict] = None) -> MapResult:
