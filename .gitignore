@@ -1,5 +1,5 @@
 # Python bytecode
-__pycache__/
+*/__pycache__/
 *.py[cod]
 *$py.class
 
@@ -142,6 +142,5 @@ local_settings.py
 # Keep project-specific build/output out
 build/
 .env
-__pycache__/
-
+*/uv.lock
 # End of file

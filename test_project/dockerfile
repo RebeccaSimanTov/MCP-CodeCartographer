@@ -1,0 +1,38 @@
+FROM python:3.12-slim
+
+# --- Install system dependencies ---
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates curl gcc && \
+    rm -rf /var/lib/apt/lists/*
+
+# --- Add NetFree CA ---
+COPY devtools/certs/RL-ca.crt /usr/local/share/ca-certificates/netfree-ca.crt
+RUN chmod 644 /usr/local/share/ca-certificates/netfree-ca.crt && update-ca-certificates
+
+# --- SSL env vars for Python / Pip / Requests ---
+# Make all tools use the NetFree bundle explicitly
+ENV NETFREE_CA=/etc/ssl/certs/ca-certificates.crt
+ENV REQUESTS_CA_BUNDLE=$NETFREE_CA
+ENV SSL_CERT_FILE=$NETFREE_CA
+ENV PIP_CERT=$NETFREE_CA
+ENV GRPC_DEFAULT_SSL_ROOTS_FILE_PATH=$NETFREE_CA
+ENV NODE_EXTRA_CA_CERTS=$NETFREE_CA
+ENV CURL_CA_BUNDLE=$NETFREE_CA
+
+# --- Working directory ---
+WORKDIR /app
+COPY orchestrator/ .
+
+# --- Install pip + uv using NetFree cert ---
+RUN pip install --upgrade pip --cert $NETFREE_CA
+RUN pip install --no-cache-dir uv --cert $NETFREE_CA
+
+ENV UV_HTTP_TIMEOUT=400
+ENV UV_CA_BUNDLE=$NETFREE_CA
+
+RUN uv sync
+
+ENV PYTHONPATH=/app
+EXPOSE 9000
+
+CMD ["uv", "run", "uvicorn", "src.server.websocket_server:app", "--host", "0.0.0.0", "--port", "9000", "--reload"]

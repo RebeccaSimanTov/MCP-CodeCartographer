@@ -1,0 +1,66 @@
+# Combined Worker + MCP Service Dockerfile
+# Runs both RabbitMQ worker AND the MCP service in the same container
+FROM python:3.13-slim
+
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates curl gcc supervisor && \
+    rm -rf /var/lib/apt/lists/*
+
+# Add NetFree CA
+COPY devtools/certs/RL-ca.crt /usr/local/share/ca-certificates/netfree-ca.crt
+RUN chmod 644 /usr/local/share/ca-certificates/netfree-ca.crt && update-ca-certificates
+
+# SSL env vars
+ENV NETFREE_CA=/etc/ssl/certs/ca-certificates.crt
+ENV REQUESTS_CA_BUNDLE=$NETFREE_CA
+ENV SSL_CERT_FILE=$NETFREE_CA
+ENV PIP_CERT=$NETFREE_CA
+ENV GRPC_DEFAULT_SSL_ROOTS_FILE_PATH=$NETFREE_CA
+ENV CURL_CA_BUNDLE=$NETFREE_CA
+
+WORKDIR /app
+
+# Copy common, utils, and orchestrator (for worker)
+COPY common /app/common
+COPY tests /app/tests
+COPY orchestrator /app/orchestrator
+
+# Copy the specific MCP service (will be different per service)
+ARG SERVICE_DIR
+COPY ${SERVICE_DIR} /app/service
+
+# Create required directories for tests/plans
+RUN mkdir -p /app/tests/plans/default_tenant && \
+    chmod -R 777 /app/tests/plans
+
+# Set Python path
+ENV PYTHONPATH=/app:/app/common:/app/utils:/app/orchestrator:/app/service
+
+# Install dependencies for both worker and service
+WORKDIR /app/orchestrator
+RUN pip install --no-cache-dir --cert /etc/ssl/certs/ca-certificates.crt \
+    aio-pika==9.4.0 \
+    aiormq==6.8.0 \
+    httpx>=0.24.0 \
+    pydantic>=2.0.0 \
+    fastmcp
+
+# Install psycopg separately to avoid conflicts
+RUN pip install --no-cache-dir --cert /etc/ssl/certs/ca-certificates.crt \
+    psycopg-binary==3.2.12
+
+# Install service dependencies using pip directly from pyproject.toml
+WORKDIR /app/service
+RUN if [ -f "pyproject.toml" ]; then \
+        pip install --no-cache-dir --cert /etc/ssl/certs/ca-certificates.crt .; \
+    fi
+
+# Create supervisor config
+RUN mkdir -p /var/log/supervisor
+COPY orchestrator/supervisor.conf /etc/supervisor/conf.d/supervisord.conf
+
+WORKDIR /app
+
+# Supervisor will manage both processes
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
