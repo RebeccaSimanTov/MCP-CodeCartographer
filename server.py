@@ -4,6 +4,27 @@ import io
 import logging
 import json
 import networkx as nx
+"""------------------------------------------------------------------------------
+🛡️ ERROR HANDLING & ROBUSTNESS STRATEGY
+------------------------------------------------------------------------------
+This server implements a robust error handling strategy designed for LLM interactions:
+
+1. Graceful Degradation:
+   - AI Failures: If Gemini API fails (429/403) or is missing, the system 
+     returns a 'Simulated' analysis to prevent crashing the entire workflow.
+   - Parsing Errors: The RepositoryScanner skips unreadable files logs warnings,
+     ensuring a single bad file doesn't stop the scan.
+
+2. Edge Case Management:
+   - Cyclic Dependencies: The GraphGenerator automatically detects cycles and 
+     switches layout algorithms (from topological to spring) to ensure rendering.
+   - Large Repositories: The scanner filters out non-code directories (venv, node_modules)
+     to optimize performance.
+
+3. Persistence Safety:
+   - The StorageManager enforces atomic saves and automatic cleanup of old
+     artifacts to prevent disk clutter and race conditions.
+------------------------------------------------------------------------------"""
 
 # --- Windows Encoding Fix ---
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
