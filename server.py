@@ -27,8 +27,16 @@ This server implements a robust error handling strategy designed for LLM interac
 ------------------------------------------------------------------------------"""
 
 # --- Windows Encoding Fix ---
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+try:
+    # Only re-wrap stdout/stderr if the underlying buffer is available
+    if getattr(sys, "stdout", None) and getattr(sys.stdout, "buffer", None):
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    if getattr(sys, "stderr", None) and getattr(sys.stderr, "buffer", None):
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+except Exception:
+    # If execution environment (like pytest) has closed or replaced std handles,
+    # skip re-wrapping to avoid ValueError during import.
+    pass
 
 # Import Services
 from src.services.repository_scanner import RepositoryScanner
