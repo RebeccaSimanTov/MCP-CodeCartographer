@@ -154,3 +154,48 @@ Once connected, simply talk to Claude to operate the tool:
 | Visualize Risks   | `Show me the map again.` *(Shows Red / MRI Map)*                                |
 | Deep Dive         | `What is the context of the billing_service module?`                            |
 | Check Stats       | `Show me the architecture statistics.`                                          |
+
+---
+
+## ❓ Troubleshooting & Common Issues
+
+If you encounter issues while running the server, check these common solutions:
+
+### 1. "Graph ID not found"
+* **Cause:** You are trying to run `generate_quick_map` or `run_architectural_mri` without scanning first.
+* **Solution:** Always start by asking Claude to **"Scan the repository at [path]"**. This generates the ID required for all other tools.
+
+### 2. Google Gemini API Errors (403 or 429)
+* **403 Forbidden:** Your API Key is invalid or missing. Check your `.env` file.
+* **429 Too Many Requests:** You hit the free tier rate limit. The system has built-in retries, but if it persists, wait 1-2 minutes.
+
+### 3. "No Python files found"
+* **Cause:** The path provided does not contain `.py` files or is inside a skipped directory (like `venv`).
+* **Solution:** Provide the absolute path to the project root (e.g., `C:/Users/Dev/MyProject`).
+
+---
+
+## ⚠️ Limitations & Edge Cases
+
+Code Cartographer is designed for robustness, but here is how it handles edge cases:
+
+* **🔄 Cyclic Dependencies:** If Module A imports B, and B imports A, the visualizer automatically breaks the cycle to enforce a readable tree layout (Top-Down), though the logical link remains in the graph data.
+* **🕵️ Dynamic Imports:** The scanner uses **Static Analysis (AST)**. It captures standard imports (`import x`, `from y import z`). Complex dynamic imports like `importlib.import_module(variable)` may not be detected.
+* **📉 Large Monorepos:** For repositories exceeding 3,000 files, the AI Analysis step might hit context window limits. The system will process the most central nodes first to maximize value.
+* **🔒 Network Restrictions:** The `AIAnalyzer` is configured to bypass SSL verification errors common in restricted corporate networks (like NetFree), but a stable internet connection is required for the Gemini API.
+
+---
+
+## 🏗️ Architectural Decisions
+
+### Why Raw HTTP (httpx) instead of LangChain/SDKs?
+This project deliberately uses direct `httpx` requests to interact with the Gemini API, avoiding high-level wrappers like `langchain` or `google-genai`. This decision was driven by three core engineering principles:
+
+1.  **🛡️ Enterprise Network Compatibility:**
+    Production environments in strict corporate settings (Financial, Defense, or filtered networks) often require custom SSL context handling or proxy configurations. High-level SDKs often abstract the transport layer too heavily, making it difficult to bypass SSL verification errors or inject custom certificates. Using `httpx` grants full control over the TLS handshake, ensuring the tool works in secured environments.
+
+2.  **🪶 Minimal Footprint & Speed:**
+    Libraries like LangChain introduce a massive dependency tree ("bloat"). By using standard HTTP calls, we keep the installation instant (`uv` friendly), the container size small, and the execution predictable.
+
+3.  **⚡ Precise Error Handling:**
+    Direct API access allows for granular handling of HTTP 429 (Rate Limit) vs 403 (Forbidden) with custom exponential backoff logic tailored to this specific application, rather than relying on the generic retry logic of a wrapper library.

@@ -4,10 +4,39 @@ import io
 import logging
 import json
 import networkx as nx
+"""------------------------------------------------------------------------------
+🛡️ ERROR HANDLING & ROBUSTNESS STRATEGY
+------------------------------------------------------------------------------
+This server implements a robust error handling strategy designed for LLM interactions:
+
+1. Graceful Degradation:
+   - AI Failures: If Gemini API fails (429/403) or is missing, the system 
+     returns a 'Simulated' analysis to prevent crashing the entire workflow.
+   - Parsing Errors: The RepositoryScanner skips unreadable files logs warnings,
+     ensuring a single bad file doesn't stop the scan.
+
+2. Edge Case Management:
+   - Cyclic Dependencies: The GraphGenerator automatically detects cycles and 
+     switches layout algorithms (from topological to spring) to ensure rendering.
+   - Large Repositories: The scanner filters out non-code directories (venv, node_modules)
+     to optimize performance.
+
+3. Persistence Safety:
+   - The StorageManager enforces atomic saves and automatic cleanup of old
+     artifacts to prevent disk clutter and race conditions.
+------------------------------------------------------------------------------"""
 
 # --- Windows Encoding Fix ---
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+try:
+    # Only re-wrap stdout/stderr if the underlying buffer is available
+    if getattr(sys, "stdout", None) and getattr(sys.stdout, "buffer", None):
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    if getattr(sys, "stderr", None) and getattr(sys.stderr, "buffer", None):
+        sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+except Exception:
+    # If execution environment (like pytest) has closed or replaced std handles,
+    # skip re-wrapping to avoid ValueError during import.
+    pass
 
 # Import Services
 from src.services.repository_scanner import RepositoryScanner
@@ -55,9 +84,22 @@ def _load_graph(graph_id: str):
 @mcp.tool()
 def scan_repository(path: str = ".") -> ScanResult:
     """
-    1. Scans the codebase.
-    2. Builds dependency graph.
-    3. Saves to storage (auto-cleans old scans of same path).
+    Performs a comprehensive static analysis scan of a local Python repository.
+    
+    This tool parses the Abstract Syntax Tree (AST) of Python files to identify 
+    modules, classes, and explicit import dependencies. It constructs a directed 
+    dependency graph and persists it to the internal storage.
+
+    Args:
+        path (str): The absolute or relative file system path to the project root. 
+                    Defaults to the current working directory.
+
+    Returns:
+        ScanResult: A structured object containing:
+            - `graph_id` (str): The unique UUID required to reference this graph in other tools.
+            - `analyzed_files` (int): Count of processed Python files.
+            - `most_central` (str): The module with the highest degree centrality.
+            - `success` (bool): Operation status.
     """
     logging.info(f"🚀 Tool called: scan_repository with path={path}")
     # The scanner now uses 'storage' internally to save the file
@@ -66,8 +108,23 @@ def scan_repository(path: str = ".") -> ScanResult:
 @mcp.tool()
 def generate_quick_map(graph_id: str) -> MapResult:
     """
-    🎨 VISUALIZER: Generates the architectural map PNG.
-    Reads from storage, generates image in memory, saves image back to storage.
+    Renders the current state of the architecture graph into a high-resolution visualization.
+    
+    This tool dynamically determines the visual style based on available data:
+    1. **Structural Mode:** If only `scan_repository` has run, it generates a blue-themed 
+       hierarchical map showing explicit dependencies.
+    2. **MRI Mode:** If `run_architectural_mri` has populated the cache, it overlays a 
+       Risk Heatmap (Red nodes for complexity) and visualizes Shadow Links (Dashed lines).
+
+    Args:
+        graph_id (str): The unique identifier obtained from `scan_repository`.
+
+    Returns:
+        MapResult: A structured object containing:
+            - `image_path` (str): The local file path to the generated PNG image.
+            - `node_count` (int): Total nodes rendered.
+            - `edge_count` (int): Total edges rendered.
+            - `success` (bool): Rendering status.
     """
     logging.info(f"⚡ Tool called: generate_quick_map (Graph: {graph_id})")
     
@@ -105,10 +162,24 @@ def generate_quick_map(graph_id: str) -> MapResult:
 @mcp.tool()
 async def run_architectural_mri(graph_id: str, force_refresh: bool = False) -> AIAnalysis:
     """
-    🏥 ANALYZER: Performs AI Risk Assessment and returns an `AIAnalysis` summary
-    for the most central module in the graph. Also persists the raw AI outputs
-    (`risk_scores`, `hidden_links`) and a `module_analysis` snapshot under
-    `data["ai_analysis"]` for later use.
+    Executes a semantic AI analysis ("MRI") on the dependency graph to detect architectural risks.
+    
+    This tool utilizes an LLM (Gemini) to identify:
+    1. **Shadow Dependencies:** Logical connections not explicitly imported (e.g., shared DB tables, API routes, Pub/Sub topics).
+    2. **Code Complexity:** Assigns risk scores (1-10) to modules based on responsibility overload ("God Classes").
+    
+    Results are persisted to the graph's metadata storage to enrich future visualizations.
+
+    Args:
+        graph_id (str): The unique identifier obtained from `scan_repository`.
+        force_refresh (bool): If True, bypasses the storage cache and forces a fresh AI inference.
+
+    Returns:
+        AIAnalysis: A structured analysis object containing:
+            - `analysis` (str): A detailed Markdown report summarizing top risks and hidden links.
+            - `module` (str): The name of the most central module analyzed.
+            - `dependencies` (List[str]): Outgoing dependencies of the central module.
+            - `used_by` (List[str]): Incoming dependencies to the central module.
     """
     logging.info(f"🏥 Tool called: run_architectural_mri (Graph: {graph_id}, Force: {force_refresh})")
     
@@ -214,7 +285,15 @@ async def run_architectural_mri(graph_id: str, force_refresh: bool = False) -> A
 
 @mcp.resource("graph://list")
 def list_available_graphs() -> str:
-    """Lists all managed project scans."""
+    """
+    Retrieves the registry of all repository scans managed by this server.
+    
+    Use this resource to discover valid `graph_id`s from previous sessions.
+    
+    Returns:
+        str: A newline-separated list formatted as:
+        `Folder Path | Graph ID | Last Scan Timestamp`
+    """
     index = storage._index
     if not index: return "No scans found."
     lines = []
@@ -224,7 +303,18 @@ def list_available_graphs() -> str:
 
 @mcp.resource("graph://{graph_id}/stats")
 def get_graph_stats(graph_id: str) -> str:
-    """📊 Returns vital statistics about the architecture."""
+    """
+    Calculates and returns quantitative architectural metrics for a specific graph.
+    
+    Metrics provided:
+    - Node/Edge counts (Size)
+    - Graph Density (Coupling indicator)
+    - Directed Acyclic Graph (DAG) status (Cycle detection)
+    - Weakly Connected Components (Modularity/Isolation)
+    
+    Returns:
+        str: A Markdown-formatted statistical summary.
+    """
     g, data = _load_graph(graph_id)
     if not g: return "Graph not found."
     
@@ -243,7 +333,16 @@ def get_graph_stats(graph_id: str) -> str:
 
 @mcp.resource("graph://{graph_id}/risks")
 def get_risk_report(graph_id: str) -> str:
-    """🔥 Returns ONLY the high-risk modules (Technical Debt)."""
+    """
+    Retrieves the filtered high-risk findings from the AI analysis.
+    
+    This resource isolates 'Technical Debt' by filtering for modules with 
+    a Risk Score > 5. It requires `run_architectural_mri` to have populated 
+    the cache first.
+    
+    Returns:
+        str: A Markdown list of high-risk modules and their scores.
+    """
     _, data = _load_graph(graph_id)
     if not data or "ai_analysis" not in data: return "No AI analysis found. Run `run_architectural_mri` first."
     
@@ -262,9 +361,16 @@ def get_risk_report(graph_id: str) -> str:
 @mcp.resource("graph://{graph_id}/context/{module_name}")
 def get_module_context(graph_id: str, module_name: str) -> str:
     """
-    🍒 THE KILLER FEATURE: Graph RAG.
-    Returns the specific neighborhood of a module: Who calls it? Who does it call?
-    Great for focused refactoring tasks.
+    Performs a localized graph traversal (Graph RAG) for a specific module.
+    
+    This resource extracts the immediate 'neighborhood' of a node to provide 
+    context for refactoring or impact analysis.
+    
+    Returns:
+        str: A summary containing:
+        - The module's AI Risk Score.
+        - 'Used By': List of upstream callers (Predecessors).
+        - 'Depends On': List of downstream dependencies (Successors).
     """
     g, data = _load_graph(graph_id)
     if not g: return "Graph not found."
