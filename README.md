@@ -183,3 +183,19 @@ Code Cartographer is designed for robustness, but here is how it handles edge ca
 * **🕵️ Dynamic Imports:** The scanner uses **Static Analysis (AST)**. It captures standard imports (`import x`, `from y import z`). Complex dynamic imports like `importlib.import_module(variable)` may not be detected.
 * **📉 Large Monorepos:** For repositories exceeding 3,000 files, the AI Analysis step might hit context window limits. The system will process the most central nodes first to maximize value.
 * **🔒 Network Restrictions:** The `AIAnalyzer` is configured to bypass SSL verification errors common in restricted corporate networks (like NetFree), but a stable internet connection is required for the Gemini API.
+
+---
+
+## 🏗️ Architectural Decisions
+
+### Why Raw HTTP (httpx) instead of LangChain/SDKs?
+This project deliberately uses direct `httpx` requests to interact with the Gemini API, avoiding high-level wrappers like `langchain` or `google-genai`. This decision was driven by three core engineering principles:
+
+1.  **🛡️ Enterprise Network Compatibility:**
+    Production environments in strict corporate settings (Financial, Defense, or filtered networks) often require custom SSL context handling or proxy configurations. High-level SDKs often abstract the transport layer too heavily, making it difficult to bypass SSL verification errors or inject custom certificates. Using `httpx` grants full control over the TLS handshake, ensuring the tool works in secured environments.
+
+2.  **🪶 Minimal Footprint & Speed:**
+    Libraries like LangChain introduce a massive dependency tree ("bloat"). By using standard HTTP calls, we keep the installation instant (`uv` friendly), the container size small, and the execution predictable.
+
+3.  **⚡ Precise Error Handling:**
+    Direct API access allows for granular handling of HTTP 429 (Rate Limit) vs 403 (Forbidden) with custom exponential backoff logic tailored to this specific application, rather than relying on the generic retry logic of a wrapper library.
